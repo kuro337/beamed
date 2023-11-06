@@ -7,11 +7,9 @@
 
 # Event Streaming
 
-100% Kotlin Native library to create or use with a Real Time Event Streaming System.
+100% Kotlin Native library to fully create and use with a Real Time Event Streaming System.
 
-- Apache Beam
-- Apache Kafka
-- Apache Flink
+Fully Setup Beam, Flink, and Kafka on a machine or running Kubernetes.
 
 ### Apache Beam
 
