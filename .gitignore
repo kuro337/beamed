@@ -1,0 +1,13 @@
+!/gradlew.bat
+/beam/build/
+/app/build/
+/kafka/build/
+/beam/src/main/resources/application.properties
+/beam/build/
+/beam/build/
+.idea
+.gradle
+/build
+containers
+
+/containers/.dockerbuild
