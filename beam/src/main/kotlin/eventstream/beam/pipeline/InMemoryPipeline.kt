@@ -64,6 +64,7 @@ class InMemoryPipeline() {
                 CsvRowMapper.applyCSVProcessing(pipeline, file, output)
                 pipeline.run().waitUntilFinish()
             }
+
             logger.info { "Successfully Executed In-Memory Pipeline with ${data.size} files." }
         }
 
@@ -73,8 +74,11 @@ class InMemoryPipeline() {
             logger.info { "Running In-Memory Pipeline" }
 
             val pipeline = Pipeline.create()
+
             CSVSchema.applySerializationFromCsvFile(pipeline, data)
+
             pipeline.run().waitUntilFinish()
+
             logger.info { "Successfully executed In-Memory Pipeline for file: $data" }
         }
 
@@ -83,19 +87,26 @@ class InMemoryPipeline() {
             logger.info { "Running In-Memory Pipeline" }
 
             val pipeline = Pipeline.create()
+
             val fredCollection = CSVSchema.applySerializationFromCsvFile(pipeline, data)
-            //countCategoriesFredSeries(fredCollection)
+
             analyzeGenericColsFredSeries(fredCollection, listOf("title", "units", "popularity"))
+
             pipeline.run().waitUntilFinish()
+
             logger.info { "Successfully executed In-Memory Pipeline for file: $data" }
         }
 
         fun runCSVSchema(data: String) {
             val logger = KotlinLogging.logger {}
             logger.info { "Running In-Memory Pipeline" }
+
             val pipeline = Pipeline.create()
+
             CSVSchema.applyCsvClassSerialization(pipeline)
+
             pipeline.run().waitUntilFinish()
+
             logger.info { "Successfully executed In-Memory Pipeline for file: $data" }
         }
 
@@ -107,8 +118,8 @@ class InMemoryPipeline() {
 
             CSVSchema.applySimpleSerialization(pipeline)
 
-
             pipeline.run().waitUntilFinish()
+
             logger.info { "Successfully executed Simple In-Memory Pipeline." }
         }
     }

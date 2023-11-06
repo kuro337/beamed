@@ -14,12 +14,12 @@ import java.util.regex.Pattern
 data class FredSeries(
     var id: String = "",
     var title: String = "",
-    var observationStart: LocalDate = LocalDate.of(2000, 1, 1), // Example default date
-    var observationEnd: LocalDate = LocalDate.of(2000, 1, 1),   // Example default date
+    var observationStart: LocalDate = LocalDate.of(2000, 1, 1),
+    var observationEnd: LocalDate = LocalDate.of(2000, 1, 1),
     var frequency: String = "",
     var units: String = "",
     var seasonal_adjustment: String = "",
-    var lastUpdated: LocalDateTime = LocalDateTime.of(2000, 1, 1, 0, 0), // Example default datetime
+    var lastUpdated: LocalDateTime = LocalDateTime.of(2000, 1, 1, 0, 0),
     var popularity: Int = 0,
     var groupPopularity: Int = 0,
     var notes: String = ""
@@ -58,7 +58,7 @@ data class FredSeries(
                 val lastUpdated = tryParseDateTime(splitCols[7].trim(), "lastUpdated")
 
                 if (observationStart == null || observationEnd == null || lastUpdated == null) {
-                    return null // Early return if any date parse failed
+                    return null
                 }
 
                 return FredSeries(
@@ -97,11 +97,10 @@ data class FredSeries(
             return try {
                 val regex = Regex(".+[+-]\\d{2}$")
                 val modifiedInput = if (regex.matches(input)) {
-                    "$input:00" // Append missing ":00"
+                    "$input:00"
                 } else {
-                    input // Use the input as is
+                    input
                 }
-                // Try parsing the modified input
                 LocalDateTime.parse(modifiedInput, dateTimeFormatter)
             } catch (e: DateTimeParseException) {
                 logger.error(e) { "Error parsing $fieldName in CSV line: $input" }

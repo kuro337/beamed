@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
 plugins {
     java
 }
@@ -28,7 +27,7 @@ allprojects {
     }
 }
 
-// gradle checkBytecodeVersion
+/* gradle checkBytecodeVersion */
 tasks.register("checkBytecodeVersion") {
     doLast {
         val classes = listOf(
@@ -40,9 +39,7 @@ tasks.register("checkBytecodeVersion") {
             println("Checking bytecode version for $classPath")
             exec {
                 commandLine("sh", "-c", "javap -verbose $classPath | grep major")
-
-                // Verbose Output commandLine("javap", "-verbose", classPath)
-
+                /* Verbose Output commandLine("javap", "-verbose", classPath) */
                 standardOutput = System.out
             }
         }

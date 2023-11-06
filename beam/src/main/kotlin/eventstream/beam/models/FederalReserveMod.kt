@@ -26,7 +26,6 @@ class FredSeriesMod {
     var notes: String
 
 
-    // Constructor with parameters
     @SchemaCreate
     constructor(
         id: String,
@@ -55,7 +54,6 @@ class FredSeriesMod {
 
     }
 
-    // No-argument constructor for Avro
     constructor() {
         id = ""
         title = ""
@@ -89,7 +87,6 @@ class FredSeriesMod {
         val pattern = Pattern.compile("\\s*(\"[^\"]*\"|[^,]*)\\s*,")
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[XXX][X]")
-
 
         fun serializeFromCSVLine(line: String): FredSeriesMod? {
             try {
@@ -133,7 +130,6 @@ class FredSeriesMod {
             }
         }
 
-
         fun tryParseDate(input: String, fieldName: String): LocalDate? {
             return try {
                 LocalDate.parse(input, dateFormatter)
@@ -147,19 +143,16 @@ class FredSeriesMod {
             return try {
                 val regex = Regex(".+[+-]\\d{2}$")
                 val modifiedInput = if (regex.matches(input)) {
-                    "$input:00" // Append missing ":00"
+                    "$input:00"
                 } else {
-                    input // Use the input as is
+                    input
                 }
-                // Try parsing the modified input
                 LocalDateTime.parse(modifiedInput, dateTimeFormatter)
             } catch (e: DateTimeParseException) {
                 logger.error(e) { "Error parsing $fieldName in CSV line: $input" }
                 null
             }
         }
-
-
     }
 
     override fun toString(): String {

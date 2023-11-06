@@ -10,13 +10,11 @@ class SimpleSchema {
     var bank: String
     var purchaseAmount: Double
 
-    // No-argument constructor for Avro
     constructor() {
         bank = ""
         purchaseAmount = 0.0
     }
 
-    // Constructor with parameters
     @SchemaCreate
     constructor(bank: String, purchaseAmount: Double) {
         this.bank = bank

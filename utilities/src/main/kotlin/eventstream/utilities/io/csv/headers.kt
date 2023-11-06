@@ -6,7 +6,7 @@ import java.io.File
 
 /**
  * #### `CSV Schema Printer`
- * - Example Usage
+ * - Usage
  * ```kotlin
  * val csvFile = "path/to/your/csvfile.csv"
  * printCsvHeaders(csvFile)
