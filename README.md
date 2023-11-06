@@ -5,11 +5,22 @@
   <img alt="Kotlin logo" height="200px" src="data/assets/kotlin.png">
 </div>
 
-# Event Streaming
+# Beamed
 
-100% Kotlin Native library to fully create and use with a Real Time Event Streaming System.
+_Big Data Streaming & Processing_
+<hr/>
+<hr/>
 
-Fully Setup Beam, Flink, and Kafka on a machine or running Kubernetes.
+- Ingest, Transform, Analyze, and Export **Data** at any **Scale** Independent of Compute and Runtime.
+
+
+- 100% _Kotlin Native_ libraries to fully create and use with a Real Time Event Streaming System.
+
+
+- Fully Setup [Beam](#usage), [Flink](k8/flink/README.md), and [Kafka](k8/kafka/README.md) on a
+  machine or running [Kubernetes](k8/k9/README.md).
+
+<hr/>
 
 ### Apache Beam
 
@@ -17,19 +28,23 @@ Fully Setup Beam, Flink, and Kafka on a machine or running Kubernetes.
 
 ### Apache Flink
 
-Hardware and Vendor Agnostic Compute Engine for Running Pipelines.
+- Hardware and Vendor Agnostic Compute Engine for Running Pipelines.
 
 ### Apache Kafka
 
-Distributed Event Broker Abstraction to use centrally with n number of applications and services.
+- Distributed Event Broker Abstraction to use centrally with n number of applications and services.
 
-#### Kotlin
+### Kotlin
 
-Completely Interops with any JVM Runtime
+- Completely Interops with any JVM Runtime
 
-Clean, expressive, flexible type system and powerful language features; highly recommend checking out Kotlin!
+- Clean, expressive, flexible type system and powerful language features; highly recommend checking out Kotlin!
 
-### Usage
+<hr/>
+
+## Usage
+
+<br/>
 
 - Simple Beam Pipeline to Process and Analyze Data and Persist Outputs
 
@@ -44,7 +59,6 @@ fun main() {
 ```
 
 <hr/>
-<br/>
 
 - Using `eventstream.kafka` package to interact with your Cluster.
 
@@ -83,7 +97,6 @@ fun main() {
 ```
 
 <hr/>
-<br/>
 
 - Processing Data from an Object Store and using Beam and Flink for declarative Data Processing
 
@@ -97,12 +110,15 @@ fun main() {
     FlinkS3Pipeline.run("s3://bucket_w_series")
 
     /* 
+    
+    Additionally:
     Run against S3 Compatible Interfaces
     
     Data Processing Pipeline against Minio - 
         - High Performance 
         - S3 Compatible Object Store
         - Run as a Server for higher Throughput
+        
      */
 
     FlinkS3Pipeline.run("myminio/data/series/*")
@@ -111,15 +127,15 @@ fun main() {
 ```
 
 <hr/>
-<br/>
 
 - Java `8` and `11` compatible `Gradle` builds and `fatJars` for each independent package.
 
-- ` Dockerfiles`  and `kube yaml` Deployments to get `Kafka` and `Flink` up and running either locally using `Docker` or
+
+- ` Dockerfiles`  and `kube yaml` [Deployments](k8/) to get `Kafka` and `Flink` up and running either locally
+  using `Docker` or
   deploying directly to `Kubernetes`
 
 <hr/>
-<br/>
 
 ##### Building and Running
 
@@ -135,19 +151,25 @@ gradle clean run :flink
 # Uber jar's 
 gradle shadowJar :beam
 
+# Running Tests
+gradle clean test
+
 # Output Java Runtime Version for Final Jar's 
 gradle checkBytecodeVersion
 ```
 
+<hr/>
+
+
 Additionally, in case you need to launch a Flink and Kafka Cluster
 
-- Flink: `k8/flink`
-- Kafka: `k8/kafka`
+- [Flink](k8/flink/README.md): `k8/flink`
+- [Kafka](k8/kafka/README.md): `k8/kafka`
 
 <hr/>
-<br/>
 
-Class Version Spec
+
+`Class Version Spec`
 
 | Java Class Version | Java SE |
 |--------------------|---------|
@@ -168,3 +190,7 @@ Class Version Spec
 | 64                 | Java 20 |
 | 65                 | Java 21 |
 | 66                 | Java 22 |
+
+<hr/>
+
+Author: [kuro337](https://github.com/kuro337)

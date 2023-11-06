@@ -98,5 +98,6 @@ helm repo remove flink-operator-repo
 
 <br/>
 
-Operator
-Reference https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.6/docs/try-flink-kubernetes-operator/quick-start/
+[Operator Reference](https://nightlies.apache.org/flink/flink-kubernetes-operator-docs-release-1.6/docs/try-flink-kubernetes-operator/quick-start/)
+
+
