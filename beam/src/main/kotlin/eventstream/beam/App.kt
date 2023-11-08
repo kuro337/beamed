@@ -1,26 +1,20 @@
 package eventstream.beam
 
-import eventstream.beam.models.SerializeModels
-import eventstream.beam.pipeline.InMemoryPipeline
-
 
 fun main() {
 
 
-    InMemoryPipeline.run(listOf("data/input/fred_series.csv", "data/input/fred_series2.csv"), "data/output/beam")
-
-    InMemoryPipeline.runCSVSchema("data/input/simple_data_noheaders.csv")
-
-    InMemoryPipeline.runCsvFedSeriesPipeline("data/input/simple_data_noheaders.csv")
-
-    InMemoryPipeline.runFredSeriesCategoricalAnalysis("data/input/simple_data_noheaders.csv")
-
-    InMemoryPipeline.runSimpleSchema()
-
-
-    SerializeModels.serializeFedSeries()
-
-    SerializeModels.serializeFedSeriesMod()
+//    InMemoryPipeline.runCSVSchema("data/input/simple_data_noheaders.csv")
+//
+//    InMemoryPipeline.runCsvFedSeriesPipeline("data/input/simple_data_noheaders.csv")
+//
+//    InMemoryPipeline.runFredSeriesCategoricalAnalysis("data/input/simple_data_noheaders.csv")
+//
+//    InMemoryPipeline.runSimpleSchema()
+//
+//    SerializeModels.serializeFedSeries()
+//
+//    SerializeModels.serializeFedSeriesMod()
 
 }
 

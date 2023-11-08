@@ -4,17 +4,28 @@ plugins {
     java
 }
 
+repositories {
+    mavenLocal()
+    mavenCentral()
+    gradlePluginPortal()
+}
+
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(9))
+        //languageVersion.set(JavaLanguageVersion.of(9))
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
 allprojects {
+
+
     plugins.withType<JavaPlugin> {
         extensions.configure<JavaPluginExtension> {
-            sourceCompatibility = JavaVersion.VERSION_1_9
-            targetCompatibility = JavaVersion.VERSION_1_9
+            //sourceCompatibility = JavaVersion.VERSION_1_9
+            //  targetCompatibility = JavaVersion.VERSION_1_9
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
         }
     }
 
@@ -22,12 +33,14 @@ allprojects {
 
 
         kotlinOptions {
-            jvmTarget = "9"
+            //jvmTarget = "9"
+            jvmTarget = "11"
         }
     }
 }
 
-/* gradle checkBytecodeVersion */
+
+/* gradle checkBytecodeVersion --console=rich */
 tasks.register("checkBytecodeVersion") {
     doLast {
         val classes = listOf(

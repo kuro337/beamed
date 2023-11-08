@@ -1,18 +1,25 @@
 package eventstream.app
 
-import eventstream.utilities.stringutils.StringUtils
-
-import org.apache.commons.text.WordUtils
-
 fun main() {
 
     /*
+       @Sample
 
-    Blank App in case you need to fork and Extend this Library
+       - Using Functionality from Libraries
+
+
+    InMemoryPipeline.runCSVSchema("data/input/simple_data_noheaders.csv")
+
+    InMemoryPipeline.runCsvFedSeriesPipeline("data/input/simple_data_noheaders.csv")
+
+    InMemoryPipeline.runFredSeriesCategoricalAnalysis("data/input/simple_data_noheaders.csv")
+
+    InMemoryPipeline.runSimpleSchema()
+
+    SerializeModels.serializeFedSeries()
+
+    SerializeModels.serializeFedSeriesMod()
 
     */
 
-    val tokens = StringUtils.split(MessageUtils.getMessage())
-    val result = StringUtils.join(tokens)
-    println(WordUtils.capitalize(result))
 }
