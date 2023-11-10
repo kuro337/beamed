@@ -6,7 +6,6 @@ import eventstream.beam.models.SimpleSchema
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.beam.sdk.Pipeline
 import org.apache.beam.sdk.extensions.avro.coders.AvroCoder
-import org.apache.beam.sdk.io.TextIO
 import org.apache.beam.sdk.transforms.*
 import org.apache.beam.sdk.values.PCollection
 import org.apache.beam.sdk.values.TypeDescriptor
@@ -15,7 +14,7 @@ import org.apache.beam.sdk.values.TypeDescriptor
 object CSVSchema {
     private val logger = KotlinLogging.logger {}
 
-    fun applyCsvClassSerialization(pipeline: Pipeline) {
+    fun fredSeriesSingletonPipeline(pipeline: Pipeline): PCollection<FredSeriesMod> {
         val fredSeriesForTesting = serializeGetFredSeriesModSingleton()
         logger.info { "Object being Used for Pipeline $fredSeriesForTesting" }
 
@@ -35,18 +34,28 @@ object CSVSchema {
                 }
             })
         )
+
+        return singleFredSeriesPCollection
     }
 
-    fun applySerializationFromCsvFile(pipeline: Pipeline, file: String): PCollection<FredSeriesMod> {
-        val fredSeriesModPCollection: PCollection<FredSeriesMod?> = pipeline
-            .apply("Read Data", TextIO.read().from(file))
+    fun applySerializationFromCsvFile(lines: PCollection<String>): PCollection<FredSeriesMod> {
+
+
+//        val lines: PCollection<String> = pipeline.apply("Create File Patterns", Create.of(inputFiles))
+
+        val fredSeriesModPCollection: PCollection<FredSeriesMod?> = lines
             .apply(
                 "Convert Lines to FredSeriesMod", MapElements
                     .into(TypeDescriptor.of(FredSeriesMod::class.java))
                     .via(SerializableFunction<String, FredSeriesMod?> { line ->
-                        FredSeriesMod.serializeFromCSVLine(line)
+                        try {
+                            FredSeriesMod.serializeFromCsvLine(line)
+                        } catch (e: Exception) {
+                            null // or log/handle the error appropriately
+                        }
                     })
             ).setCoder(AvroCoder.of(FredSeriesMod::class.java))
+
 
         // @ Filter Failed Serializations
         val nonNullFredSeriesModPCollection: PCollection<FredSeriesMod> = fredSeriesModPCollection

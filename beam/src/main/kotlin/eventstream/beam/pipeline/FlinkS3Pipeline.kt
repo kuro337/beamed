@@ -1,5 +1,8 @@
 package eventstream.beam.pipeline
 
+import eventstream.beam.BeamPipeline
+import eventstream.beam.BeamPipelineOptions
+import eventstream.beam.PIPELINE
 import eventstream.beam.pipeline.decorators.PipelineType
 import eventstream.beam.pipeline.options.attachAWSCredsToFlinkPipelineOptions
 import eventstream.beam.pipeline.options.createFlinkPipelineOptions
@@ -10,9 +13,23 @@ import org.apache.beam.sdk.transforms.ParDo
 import org.apache.beam.sdk.values.PCollection
 
 @PipelineType("Flink S3 Pipeline")
-object FlinkS3Pipeline {
-    @JvmStatic
-    fun run() {
+class FlinkS3Pipeline(private val options: BeamPipelineOptions) : BeamPipeline {
+    private val pipelines = listOf(PIPELINE.FLINK_S3)
+
+    override fun getOptions(): BeamPipelineOptions = options
+    override fun run(pipelineType: PIPELINE) {
+        when (pipelineType) {
+            PIPELINE.FLINK_S3 -> objectStorePipeline()
+            // Handle other cases if necessary
+            else -> throw IllegalArgumentException("Pipeline type not supported by this class")
+        }
+    }
+
+    override fun getPipelines(): List<PIPELINE> {
+        return listOf(PIPELINE.FLINK_S3)
+    }
+
+    private fun objectStorePipeline() {
         /*
         @FlinkRunner
         @DistributedPipeline

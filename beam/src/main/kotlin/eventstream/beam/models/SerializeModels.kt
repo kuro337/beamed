@@ -4,6 +4,7 @@ import eventstream.utilities.io.csv.printCsvHeaders
 import eventstream.utilities.io.csv.readCsvLines
 import io.github.oshai.kotlinlogging.KotlinLogging
 
+
 object SerializeModels {
     private var logger = KotlinLogging.logger("Serialize Models")
     fun serializeAndReturnSingleModel(): FredSeries? {
@@ -20,7 +21,7 @@ object SerializeModels {
         val testLine =
             "PCU113310113310,Producer Price Index by Industry: Logging,1981-12-01,2023-09-01,Monthly,Index Dec 1981=100,Not Seasonally Adjusted,2023-10-11 08:05:34-05,1,13,"
 
-        val parsedObject = FredSeriesMod.serializeFromCSVLine(testLine)
+        val parsedObject = FredSeriesMod.serializeFromCsvLine(testLine)
         logger.info { parsedObject }
 
         return parsedObject
@@ -65,7 +66,7 @@ object SerializeModels {
         var failedCount = 0
 
         val fredSeriesList = lines.mapNotNull { line ->
-            FredSeriesMod.Companion.serializeFromCSVLine(line)?.also {
+            FredSeriesMod.Companion.serializeFromCsvLine(line)?.also {
                 successfulCount++
             } ?: run {
                 failedCount++
@@ -83,7 +84,7 @@ object SerializeModels {
         val testLine =
             "PCU113310113310,Producer Price Index by Industry: Logging,1981-12-01,2023-09-01,Monthly,Index Dec 1981=100,Not Seasonally Adjusted,2023-10-11 08:05:34-05,1,13,"
 
-        val parsedObject = FredSeriesMod.serializeFromCSVLine(testLine)
+        val parsedObject = FredSeriesMod.serializeFromCsvLine(testLine)
         logger.info { parsedObject }
     }
 }

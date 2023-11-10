@@ -15,6 +15,10 @@ dependencies {
     api("org.apache.beam:beam-runners-direct-java:2.50.0")
     api("org.apache.beam:beam-runners-flink-1.16:2.50.0")
     api("org.apache.beam:beam-sdks-java-io-amazon-web-services2:2.51.0")
+    api("org.apache.beam:beam-sdks-java-io-parquet:2.51.0")
+    implementation("org.apache.hadoop:hadoop-core:1.2.1")
+
+
     api("software.amazon.awssdk:s3:2.21.10")
 
 }

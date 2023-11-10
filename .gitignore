@@ -12,5 +12,4 @@ containers
 
 /containers/.dockerbuild
 docs/beam_docs/
-docs
-/docs/
+docs/

@@ -1,6 +1,10 @@
 package eventstream.beam.models
 
+import eventstream.beam.BeamEntity
+import eventstream.beam.SerializableEntity
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.apache.beam.sdk.coders.Coder
+import org.apache.beam.sdk.extensions.avro.coders.AvroCoder
 import org.apache.beam.sdk.schemas.JavaFieldSchema
 import org.apache.beam.sdk.schemas.annotations.DefaultSchema
 import org.apache.beam.sdk.schemas.annotations.SchemaCreate
@@ -12,7 +16,7 @@ import java.util.regex.Pattern
 
 @DefaultSchema(JavaFieldSchema::class)
 
-class FredSeriesMod {
+class FredSeriesMod : BeamEntity {
     var id: String
     var title: String
     var observationStart: String
@@ -68,6 +72,23 @@ class FredSeriesMod {
         notes = ""
     }
 
+    override fun getFieldValue(fieldName: String): Any? {
+        return when (fieldName) {
+            "id" -> this.id
+            "title" -> this.title
+            "observationStart" -> this.observationStart
+            "observationEnd" -> observationEnd
+            "frequency" -> frequency
+            "units" -> units
+            "seasonal_adjustment" -> seasonal_adjustment
+            "lastUpdated" -> lastUpdated
+            "popularity" -> popularity
+            "groupPopularity" -> groupPopularity
+            "notes" -> notes
+            else -> throw IllegalArgumentException("Field not found")
+        }
+    }
+
 
     fun getObservationStartDate(): LocalDate? {
         return tryParseDate(this.observationStart, "observationStart")
@@ -81,14 +102,19 @@ class FredSeriesMod {
         return tryParseDateTime(this.lastUpdated, "lastUpdated")
     }
 
-    companion object {
+    override fun getCoder(): Coder<FredSeriesMod> = Companion.getCoder()
+
+    companion object : SerializableEntity<FredSeriesMod> {
         private val logger = KotlinLogging.logger {}
 
         val pattern = Pattern.compile("\\s*(\"[^\"]*\"|[^,]*)\\s*,")
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[XXX][X]")
 
-        fun serializeFromCSVLine(line: String): FredSeriesMod? {
+        override fun getCoder(): Coder<FredSeriesMod> = AvroCoder.of(FredSeriesMod::class.java)
+
+
+        override fun serializeFromCsvLine(line: String): FredSeriesMod? {
             try {
                 val matcher = pattern.matcher(line + ",")
                 val splitCols = mutableListOf<String>()
