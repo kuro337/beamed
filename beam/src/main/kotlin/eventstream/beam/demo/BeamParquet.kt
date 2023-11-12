@@ -1,4 +1,4 @@
-package eventstream.beam.pipeline.transform.csv
+package eventstream.beam.demo
 
 import eventstream.beam.models.FredSeriesMod
 import org.apache.avro.generic.GenericRecord
@@ -18,8 +18,12 @@ Path - cd /d/Code/Kotlin/projects/eventstream/data/output/beam
 Metadata
 parq  output-00000-of-00005.parquet
 
+parq data/output/beam/output-00000-of-00005.parquet
+
 Schema
 parq  output-00000-of-00005.parquet  --schema
+
+parq  data/output/beam/output-00000-of-00005.parquet  --schema
 
 Top n Rows
 parq output-00000-of-00005.parquet --head 10

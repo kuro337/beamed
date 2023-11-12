@@ -1,4 +1,4 @@
-package eventstream.beam.pipeline.transform.csv
+package eventstream.beam.demo
 
 import eventstream.beam.models.FredSeriesMod
 import eventstream.beam.models.SerializeModels.serializeGetFredSeriesModSingleton

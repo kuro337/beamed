@@ -10,6 +10,9 @@ dependencies {
     api("io.github.oshai:kotlin-logging-jvm:5.1.0")
     api("eventstream:utilities:1.0.0")
 
+    // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect
+    api("org.jetbrains.kotlin:kotlin-reflect:1.9.20")
+
     api("org.apache.commons:commons-text")
     api("org.apache.beam:beam-sdks-java-core:2.50.0")
     api("org.apache.beam:beam-runners-direct-java:2.50.0")

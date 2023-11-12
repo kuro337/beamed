@@ -1,7 +1,7 @@
-package eventstream.beam.io
+package eventstream.beam.config
 
 
-import java.util.Properties
+import java.util.*
 
 fun loadProperties(filePath: String): Properties {
     val properties = Properties()

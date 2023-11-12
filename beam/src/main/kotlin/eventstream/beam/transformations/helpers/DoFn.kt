@@ -1,7 +1,18 @@
-package eventstream.beam.transformations
+/**
+ * This file defines transformation utilities for converting CSV string data into PCollection instances of BeamEntity types.
+ * It includes custom DoFn (Dataflow operation function) implementations that parse CSV lines into typed entities using provided serialization functions.
+ *
+ * - EntityDoFn: A generic DoFn for converting a CSV line to a BeamEntity using a provided serialization function.
+ * - ConvertCsvToEntityFn: A DoFn to convert CSV lines into BeamEntity objects using a SerializableEntity instance.
+ * - applyCsvToEntityTransformation: A utility function to apply the ConvertCsvToEntityFn to a PCollection of strings and output a PCollection of typed entities.
+ *
+ * The file enables CSV data processing within Apache Beam pipelines, ensuring that raw string input can be transformed into structured data suitable for downstream processing and analysis.
+ */
+
+package eventstream.beam.transformations.helpers
 
 import eventstream.beam.BeamEntity
-import eventstream.beam.SerializableEntity
+import eventstream.beam.createEntityFromCsvLine
 import org.apache.beam.sdk.coders.Coder
 import org.apache.beam.sdk.transforms.DoFn
 import org.apache.beam.sdk.transforms.ParDo
@@ -24,7 +35,7 @@ class EntityDoFn<T>(
 
 // Define a separate DoFn class
 class ConvertCsvToEntityFn<T : BeamEntity>(
-    private val entity: SerializableEntity<T>,
+    private val entity: Class<T>,
     private val coder: Coder<T?>
 ) : DoFn<String, T?>() {
 
@@ -32,7 +43,7 @@ class ConvertCsvToEntityFn<T : BeamEntity>(
     fun processElement(c: ProcessContext, receiver: OutputReceiver<T?>) {
         val line = c.element()
         val result: T? = try {
-            entity.serializeFromCsvLine(line)
+            entity.createEntityFromCsvLine(line)
         } catch (e: Exception) {
             null // Handle error appropriately
         }
@@ -42,10 +53,9 @@ class ConvertCsvToEntityFn<T : BeamEntity>(
     }
 }
 
-// Modify your applyCsvToEntityTransformation function to use the new DoFn class
 fun <T : BeamEntity> applyCsvToEntityTransformation(
     input: PCollection<String>,
-    entity: SerializableEntity<T>,
+    entity: Class<T>,
     coder: Coder<T?>
 ): @UnknownKeyFor @Initialized PCollection<T?> {
     val doFn = ConvertCsvToEntityFn(entity, coder)

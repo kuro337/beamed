@@ -1,8 +1,9 @@
 package eventstream.beam.models
 
-import eventstream.beam.BeamEntity
-import eventstream.beam.SerializableEntity
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.apache.avro.Schema
+import org.apache.avro.generic.GenericRecord
+import org.apache.avro.generic.GenericRecordBuilder
 import org.apache.beam.sdk.coders.Coder
 import org.apache.beam.sdk.extensions.avro.coders.AvroCoder
 import org.apache.beam.sdk.schemas.JavaFieldSchema
@@ -15,8 +16,7 @@ import java.time.format.DateTimeParseException
 import java.util.regex.Pattern
 
 @DefaultSchema(JavaFieldSchema::class)
-
-class FredSeriesMod : BeamEntity {
+class FredSeriesMod { // BeamEntity
     var id: String
     var title: String
     var observationStart: String
@@ -72,7 +72,7 @@ class FredSeriesMod : BeamEntity {
         notes = ""
     }
 
-    override fun getFieldValue(fieldName: String): Any? {
+    /*override*/ fun getFieldValue(fieldName: String): Any? {
         return when (fieldName) {
             "id" -> this.id
             "title" -> this.title
@@ -89,6 +89,24 @@ class FredSeriesMod : BeamEntity {
         }
     }
 
+    /*override*/ fun getAvroGenericRecord(): GenericRecord {
+        // Convert FredSeriesMod instance to GenericRecord using its Avro schema
+        val recordBuilder = GenericRecordBuilder(AvroCoder.of(FredSeriesMod::class.java).schema)
+        recordBuilder.set("id", getFieldValue("id"))
+        recordBuilder.set("title", getFieldValue("title"))
+        recordBuilder.set("observationStart", getFieldValue("observationStart"))
+        recordBuilder.set("observationEnd", getFieldValue("observationEnd"))
+        recordBuilder.set("frequency", getFieldValue("frequency"))
+        recordBuilder.set("units", getFieldValue("units"))
+        recordBuilder.set("seasonal_adjustment", getFieldValue("seasonal_adjustment"))
+        recordBuilder.set("lastUpdated", getFieldValue("lastUpdated"))
+        recordBuilder.set("popularity", getFieldValue("popularity"))
+        recordBuilder.set("groupPopularity", getFieldValue("groupPopularity"))
+        recordBuilder.set("notes", getFieldValue("notes"))
+
+        return recordBuilder.build() // Build and Return -> GenericRecord
+    }
+
 
     fun getObservationStartDate(): LocalDate? {
         return tryParseDate(this.observationStart, "observationStart")
@@ -102,19 +120,20 @@ class FredSeriesMod : BeamEntity {
         return tryParseDateTime(this.lastUpdated, "lastUpdated")
     }
 
-    override fun getCoder(): Coder<FredSeriesMod> = Companion.getCoder()
+    /*override*/ fun getCoder(): Coder<FredSeriesMod> = Companion.getCoder()
 
-    companion object : SerializableEntity<FredSeriesMod> {
+    companion object  /*:SerializableEntity<FredSeriesMod>*/ {
         private val logger = KotlinLogging.logger {}
 
         val pattern = Pattern.compile("\\s*(\"[^\"]*\"|[^,]*)\\s*,")
         val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss[XXX][X]")
 
-        override fun getCoder(): Coder<FredSeriesMod> = AvroCoder.of(FredSeriesMod::class.java)
+        /*override*/ fun getCoder(): Coder<FredSeriesMod> = AvroCoder.of(FredSeriesMod::class.java)
 
+        /*override*/ fun getStaticSchema(): Schema = AvroCoder.of(FredSeriesMod::class.java).schema
 
-        override fun serializeFromCsvLine(line: String): FredSeriesMod? {
+        /*override*/ fun serializeFromCsvLine(line: String): FredSeriesMod? {
             try {
                 val matcher = pattern.matcher(line + ",")
                 val splitCols = mutableListOf<String>()

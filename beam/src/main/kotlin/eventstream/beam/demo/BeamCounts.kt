@@ -1,4 +1,4 @@
-package eventstream.beam.pipeline.analyze
+package eventstream.beam.demo
 
 import eventstream.beam.models.FredSeriesMod
 import eventstream.beam.pipeline.S3MemoryPipeline.logger

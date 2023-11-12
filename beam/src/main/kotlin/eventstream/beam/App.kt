@@ -1,43 +1,24 @@
 package eventstream.beam
 
-import eventstream.beam.models.FredSeriesMod
+import eventstream.beam.models.FredSeries
 import eventstream.beam.pipeline.InMemoryPipeline
-import eventstream.beam.pipeline.InMemoryPipelineOptions
 
 
 fun main() {
 
-    println("Hello World")
-    val files = listOf("data/input/simple_data_noheaders.csv")
-    val options = InMemoryPipeline.createOptions(files)
+//    println("Hello World")
+    val options = InMemoryPipeline.createOptions(
+        files = listOf("data/input/simple_data_noheaders.csv"),
+        output = "data/output/beam/csv/",
+        beamEntityClass = FredSeries::class.java
+    )
+
 
     val inMemoryPipeline = InMemoryPipeline(options)
 
-    // Transform CSV Rows to be all Uppercase
-    //inMemoryPipeline.run(PIPELINE.CAPITALIZE_LINE)
+//    inMemoryPipeline.run(PIPELINE.CSV_TO_ENTITY)
 
-    // Explicitly Pass New Options on a Pipeline to Process Different Data
-//    inMemoryPipeline.run(
-//        PIPELINE.CAPITALIZE_LINE, InMemoryPipelineOptions(
-//            inputs = listOf("data/input/fred_series.csv", "data/input/fred_series2.csv"),
-//            output = "data/output/beam",
-//            writeFiles = false
-//        )
-//    )
-
-//    inMemoryPipeline.run(
-//        PIPELINE.CSV_SERIALIZE_ROWS,
-//        InMemoryPipelineOptions(inputs = listOf("data/input/simple_data_noheaders.csv"))
-//    )
-
-    inMemoryPipeline.run(
-        PIPELINE.SERIALIZE_ENTITY_FROM_CSV,
-        InMemoryPipelineOptions(
-            serializer = FredSeriesMod.Companion,
-            inputs = listOf("data/input/simple_data_noheaders.csv")
-        )
-    )
-
+    inMemoryPipeline.run(PIPELINE.ENTITY_TO_CSV)
 
     /* Test Serialization for Beam in Isolation */
 //    val entity: SerializableEntity<FredSeriesMod> = FredSeriesMod.Companion

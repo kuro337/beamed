@@ -1,11 +1,7 @@
 package eventstream.beam
 
-// Define an enum to represent the types of pipelines
-enum class PIPELINE {
-    FLINK_S3, IN_MEMORY, CAPITALIZE_LINE, CSV_SERIALIZE_ROWS, CATEGORICAL_ANALYSIS, SERIALIZE_ENTITY_FROM_CSV, SIMPLE_SCHEMA
-}
 
-// Define the interface
+/* Pipelines Available - All Implement this Base Interface */
 interface BeamPipeline {
 
     fun run(pipelineType: PIPELINE)
@@ -15,4 +11,17 @@ interface BeamPipeline {
 
 interface BeamPipelineOptions {
     fun requiredOptions(): Unit
+}
+
+/* Types of Pipeline Actions */
+enum class PIPELINE {
+    FLINK_S3,
+    CAPITALIZE_LINE,
+    ENTITY_TO_CSV,
+    CSV_SERIALIZE_ROWS,
+    CATEGORICAL_ANALYSIS,
+    CSV_TO_ENTITY,
+    CSV_TO_ENTITY_COUNT_FIELDS,
+    CSV_TO_ENTITY_TO_PARQUET,
+    PARQUET_TO_ENTITY
 }

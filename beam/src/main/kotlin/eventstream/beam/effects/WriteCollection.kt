@@ -23,7 +23,7 @@ import org.apache.beam.sdk.values.PDone
  * @constructor KafkaController
  * @sample eventstream.kafka.client.KafkaController.readMessages
  */
-class WriteCollection {
+object WriteCollection {
     fun outputCollections(input: PCollection<String>, outputPath: String, suffix: String): PDone {
         val output = input.apply(
             "Write Output", TextIO.write().to(outputPath).withSuffix(suffix)

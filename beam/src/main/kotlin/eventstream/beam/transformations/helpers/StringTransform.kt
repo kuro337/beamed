@@ -1,4 +1,4 @@
-package eventstream.beam.transformations
+package eventstream.beam.transformations.helpers
 
 import org.apache.beam.sdk.transforms.SimpleFunction
 

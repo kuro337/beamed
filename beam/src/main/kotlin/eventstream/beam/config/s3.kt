@@ -1,4 +1,4 @@
-package eventstream.beam.io
+package eventstream.beam.config
 
 
 import org.apache.beam.sdk.io.aws2.options.S3Options
