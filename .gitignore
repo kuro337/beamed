@@ -11,6 +11,13 @@
 containers
 
 /containers/.dockerbuild
-docs/beam_docs/
-docs
-/docs/
+
+# Ignore everything in the docs directory
+docs/*
+
+# But not these folders and their contents
+!docs/beam/
+!docs/generics/
+!docs/gradle/
+
+local_history.patch
