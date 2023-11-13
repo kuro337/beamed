@@ -1,7 +1,6 @@
 package eventstream.beam.demo
 
-import eventstream.beam.models.FredSeriesMod
-import eventstream.beam.models.SerializeModels.serializeGetFredSeriesModSingleton
+import eventstream.beam.models.FredSeries
 import eventstream.beam.models.SimpleSchema
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.beam.sdk.Pipeline
@@ -14,23 +13,24 @@ import org.apache.beam.sdk.values.TypeDescriptor
 object CSVSchema {
     private val logger = KotlinLogging.logger {}
 
-    fun fredSeriesSingletonPipeline(pipeline: Pipeline): PCollection<FredSeriesMod> {
-        val fredSeriesForTesting = serializeGetFredSeriesModSingleton()
+    fun fredSeriesSingletonPipeline(pipeline: Pipeline): PCollection<FredSeries> {
+        val fredSeriesForTesting = FredSeries()
+        
         logger.info { "Object being Used for Pipeline $fredSeriesForTesting" }
 
-        pipeline.getSchemaRegistry().registerPOJO(FredSeriesMod::class.java)
+        pipeline.getSchemaRegistry().registerPOJO(FredSeries::class.java)
 
-        val singleFredSeriesPCollection: PCollection<FredSeriesMod> = pipeline.apply(
+        val singleFredSeriesPCollection: PCollection<FredSeries> = pipeline.apply(
             Create.of(fredSeriesForTesting)
-                .withCoder(AvroCoder.of(FredSeriesMod::class.java))
+                .withCoder(AvroCoder.of(FredSeries::class.java))
         )
 
-        // Apply a simple transformation to log the FredSeriesMod objects
+        // Apply a simple transformation to log the FredSeries objects
         singleFredSeriesPCollection.apply(
-            "Print Row", ParDo.of(object : DoFn<FredSeriesMod, Void>() {
+            "Print Row", ParDo.of(object : DoFn<FredSeries, Void>() {
                 @ProcessElement
                 fun processElement(c: ProcessContext) {
-                    logger.info { c.element().toString() } // Log the FredSeriesMod object
+                    logger.info { c.element().toString() } // Log the FredSeries object
                 }
             })
         )
@@ -38,45 +38,45 @@ object CSVSchema {
         return singleFredSeriesPCollection
     }
 
-    fun applySerializationFromCsvFile(lines: PCollection<String>): PCollection<FredSeriesMod> {
+    fun applySerializationFromCsvFile(lines: PCollection<String>): PCollection<FredSeries> {
 
 
 //        val lines: PCollection<String> = pipeline.apply("Create File Patterns", Create.of(inputFiles))
 
-        val fredSeriesModPCollection: PCollection<FredSeriesMod?> = lines
+        val fredSeriesModPCollection: PCollection<FredSeries?> = lines
             .apply(
-                "Convert Lines to FredSeriesMod", MapElements
-                    .into(TypeDescriptor.of(FredSeriesMod::class.java))
-                    .via(SerializableFunction<String, FredSeriesMod?> { line ->
+                "Convert Lines to FredSeries", MapElements
+                    .into(TypeDescriptor.of(FredSeries::class.java))
+                    .via(SerializableFunction<String, FredSeries?> { line ->
                         try {
-                            FredSeriesMod.serializeFromCsvLine(line)
+                            FredSeries.serializeFromCsvLine(line)
                         } catch (e: Exception) {
                             null // or log/handle the error appropriately
                         }
                     })
-            ).setCoder(AvroCoder.of(FredSeriesMod::class.java))
+            ).setCoder(AvroCoder.of(FredSeries::class.java))
 
 
         // @ Filter Failed Serializations
-        val nonNullFredSeriesModPCollection: PCollection<FredSeriesMod> = fredSeriesModPCollection
-            .apply("Filter Nulls", ParDo.of(object : DoFn<FredSeriesMod?, FredSeriesMod>() {
+        val nonNullFredSeriesPCollection: PCollection<FredSeries> = fredSeriesModPCollection
+            .apply("Filter Nulls", ParDo.of(object : DoFn<FredSeries?, FredSeries>() {
                 @ProcessElement
-                fun processElement(@Element fredSeriesMod: FredSeriesMod, out: OutputReceiver<FredSeriesMod>) {
+                fun processElement(@Element fredSeriesMod: FredSeries, out: OutputReceiver<FredSeries>) {
                     fredSeriesMod?.let { out.output(it) }
                 }
 
-            })).setCoder(AvroCoder.of(FredSeriesMod::class.java))
+            })).setCoder(AvroCoder.of(FredSeries::class.java))
 
-        nonNullFredSeriesModPCollection.apply(
-            "Print FredSeriesMod", ParDo.of(object : DoFn<FredSeriesMod, Void>() {
+        nonNullFredSeriesPCollection.apply(
+            "Print FredSeries", ParDo.of(object : DoFn<FredSeries, Void>() {
                 @ProcessElement
-                fun processElement(@Element fredSeriesMod: FredSeriesMod, context: ProcessContext) {
+                fun processElement(@Element fredSeriesMod: FredSeries, context: ProcessContext) {
                     logger.info { fredSeriesMod }
                 }
             })
         )
 
-        return nonNullFredSeriesModPCollection
+        return nonNullFredSeriesPCollection
     }
 
 

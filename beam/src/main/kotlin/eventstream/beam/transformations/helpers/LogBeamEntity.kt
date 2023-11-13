@@ -1,6 +1,6 @@
 package eventstream.beam.transformations.helpers
 
-import eventstream.beam.BeamEntity
+import eventstream.beam.interfaces.entity.BeamEntity
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.beam.sdk.transforms.DoFn
 
@@ -13,7 +13,7 @@ class LogBeamEntity<T : BeamEntity> : DoFn<T, T>() {
 
 
     @ProcessElement
-    fun processElement(@Element entity: T, out: OutputReceiver<T>) {
+    fun processElement(@Element entity: T?, out: OutputReceiver<T>) {
         LoggerBeamEntity.logger.info { entity.toString() }
         // Output the entity for downstream processing if necessary
         out.output(entity)

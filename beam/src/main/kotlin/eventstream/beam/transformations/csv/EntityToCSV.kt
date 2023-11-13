@@ -7,9 +7,9 @@ Input Params : PCollection<String> (CSV Lines) , BeamEntityClass
 Output : PCollection<T:BeamEntity>
 
 */
-import eventstream.beam.BeamEntity
-import eventstream.beam.BeamTransformation
-import eventstream.beam.TRANSFORMATION
+import eventstream.beam.interfaces.entity.BeamEntity
+import eventstream.beam.interfaces.transformation.BeamTransformation
+import eventstream.beam.interfaces.transformation.TRANSFORMATION
 import org.apache.beam.sdk.coders.StringUtf8Coder
 import org.apache.beam.sdk.transforms.MapElements
 import org.apache.beam.sdk.transforms.SimpleFunction
@@ -25,12 +25,8 @@ data class TransformationParams(
 
 class EntityToCsv<T : BeamEntity>(
     val params: TransformationParams = TransformationParams() // defaults are used here
-
-)
-
-    : BeamTransformation<TransformationParams, PCollection<T>, PCollection<String>>() {
+) : BeamTransformation<TransformationParams, PCollection<T>, PCollection<String>>() {
     override val transformationType: TRANSFORMATION = TRANSFORMATION.ENTITY_TO_CSV
-
 
     override fun apply(input: PCollection<T>, params: TransformationParams): PCollection<String> {
         return input

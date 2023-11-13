@@ -1,7 +1,8 @@
 package eventstream.beam.models
 
-import eventstream.beam.BeamEntity
-import eventstream.beam.CsvParsable
+import eventstream.beam.interfaces.entity.BeamEntity
+import eventstream.beam.interfaces.entity.CsvParsable
+import eventstream.beam.interfaces.entity.ParquetParsable
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericRecord
@@ -10,6 +11,7 @@ import org.apache.beam.sdk.extensions.avro.coders.AvroCoder
 import org.apache.beam.sdk.schemas.JavaFieldSchema
 import org.apache.beam.sdk.schemas.annotations.DefaultSchema
 import org.apache.beam.sdk.schemas.annotations.SchemaCreate
+import java.io.Serializable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -86,7 +88,7 @@ class FredSeries @SchemaCreate constructor(
     }
 
 
-    companion object : CsvParsable<FredSeries> {
+    companion object : CsvParsable<FredSeries>, ParquetParsable<FredSeries>, Serializable {
 
 
         private val logger = KotlinLogging.logger {}
@@ -111,6 +113,37 @@ class FredSeries @SchemaCreate constructor(
         """.trimIndent()
             )
             return SCHEMA
+        }
+
+        @JvmStatic
+        override fun serializeFromGenericRecord(record: GenericRecord): FredSeries {
+            // Extract fields from GenericRecord using the field names
+            val id = record["id"]?.toString() ?: ""
+            val title = record["title"]?.toString() ?: ""
+            val observationStart = record["observationStart"]?.toString() ?: ""
+            val observationEnd = record["observationEnd"]?.toString() ?: ""
+            val frequency = record["frequency"]?.toString() ?: ""
+            val units = record["units"]?.toString() ?: ""
+            val seasonal_adjustment = record["seasonal_adjustment"]?.toString() ?: ""
+            val lastUpdated = record["lastUpdated"]?.toString() ?: ""
+            val popularity = record["popularity"] as? Int ?: 0
+            val groupPopularity = record["groupPopularity"] as? Int ?: 0
+            val notes = record["notes"]?.toString() ?: ""
+
+            // Create and return a new FredSeries instance using the extracted values
+            return FredSeries(
+                id = id,
+                title = title,
+                observationStart = observationStart,
+                observationEnd = observationEnd,
+                frequency = frequency,
+                units = units,
+                seasonal_adjustment = seasonal_adjustment,
+                lastUpdated = lastUpdated,
+                popularity = popularity,
+                groupPopularity = groupPopularity,
+                notes = notes
+            )
         }
 
         @JvmStatic

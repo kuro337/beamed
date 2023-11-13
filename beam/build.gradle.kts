@@ -20,11 +20,19 @@ dependencies {
     api("org.apache.beam:beam-sdks-java-io-amazon-web-services2:2.51.0")
     api("org.apache.beam:beam-sdks-java-io-parquet:2.51.0")
     implementation("org.apache.hadoop:hadoop-core:1.2.1")
-
-
     api("software.amazon.awssdk:s3:2.21.10")
 
+    /* Test Deps */
+    testImplementation("org.apache.beam:beam-sdks-java-test-utils:2.51.0")
+    testImplementation("junit:junit:4.13.2") // JUnit 4 for TestPipeline support
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.20")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.1")
+
 }
+
+
 
 java {
     withJavadocJar()

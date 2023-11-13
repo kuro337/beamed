@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     java
+
 }
 
 repositories {
@@ -19,6 +20,14 @@ java {
 
 allprojects {
 
+
+    tasks.withType<Test> {
+        useJUnitPlatform()
+
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
+    }
 
     plugins.withType<JavaPlugin> {
         extensions.configure<JavaPluginExtension> {

@@ -1,9 +1,9 @@
 package eventstream.beam.transformations.csv
 
-import eventstream.beam.BeamTransformation
-import eventstream.beam.TRANSFORMATION
-import eventstream.beam.effects.WriteCollection
+import eventstream.beam.interfaces.transformation.BeamTransformation
+import eventstream.beam.interfaces.transformation.TRANSFORMATION
 import eventstream.beam.transformations.helpers.StringTransform
+import eventstream.beam.write.WriteCollection
 import org.apache.beam.sdk.transforms.MapElements
 import org.apache.beam.sdk.values.PCollection
 import org.apache.beam.sdk.values.TypeDescriptor

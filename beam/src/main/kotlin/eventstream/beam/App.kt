@@ -1,49 +1,35 @@
+/*
 package eventstream.beam
 
+import eventstream.beam.interfaces.pipeline.PIPELINE
 import eventstream.beam.models.FredSeries
-import eventstream.beam.pipeline.InMemoryPipeline
+import eventstream.beam.pipelines.InMemoryPipeline
 
 
 fun main() {
 
-//    println("Hello World")
     val options = InMemoryPipeline.createOptions(
         files = listOf("data/input/simple_data_noheaders.csv"),
-        output = "data/output/beam/csv/",
+        output = "data/output/beam/parquet/",
+        writeFiles = false,
         beamEntityClass = FredSeries::class.java
     )
 
 
     val inMemoryPipeline = InMemoryPipeline(options)
 
-//    inMemoryPipeline.run(PIPELINE.CSV_TO_ENTITY)
+    /* Transform CSV Data */
+    inMemoryPipeline.run(PIPELINE.CSV_TO_ENTITY)
 
-    inMemoryPipeline.run(PIPELINE.ENTITY_TO_CSV)
+    /* Transform CSV Files into Parquet */
+    inMemoryPipeline.run(PIPELINE.CSV_TO_ENTITY_TO_PARQUET)
 
-    /* Test Serialization for Beam in Isolation */
-//    val entity: SerializableEntity<FredSeriesMod> = FredSeriesMod.Companion
-//    val coder: Coder<FredSeriesMod?> = NullableCoder.of(AvroCoder.of(FredSeriesMod::class.java))
-//    val doFn = ConvertCsvToEntityFn(entity, coder)
-//    SerializableUtils.ensureSerializable(doFn)
-
+    /* Write CSV */
+    // inMemoryPipeline.run(PIPELINE.ENTITY_TO_CSV)
 
 }
 
-
-// Run CSV_SERIALIZE_ROWS pipeline process
-// inMemoryPipeline.run(PIPELINE.CSV_SERIALIZE_ROWS)//    InMemoryPipeline.runCSVSchema("data/input/simple_data_noheaders.csv")
-
-//
-//    InMemoryPipeline.runCsvFedSeriesPipeline("data/input/simple_data_noheaders.csv")
-//
-//    InMemoryPipeline.runFredSeriesCategoricalAnalysis("data/input/simple_data_noheaders.csv")
-//
-//    InMemoryPipeline.runSimpleSchema()
-//
-//    SerializeModels.serializeFedSeries()
-//
-//    SerializeModels.serializeFedSeriesMod()
-
+*/
 
 /*
 @Pipelines

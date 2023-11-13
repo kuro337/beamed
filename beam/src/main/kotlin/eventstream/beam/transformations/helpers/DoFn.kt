@@ -11,8 +11,8 @@
 
 package eventstream.beam.transformations.helpers
 
-import eventstream.beam.BeamEntity
-import eventstream.beam.createEntityFromCsvLine
+import eventstream.beam.interfaces.entity.BeamEntity
+import eventstream.beam.interfaces.entity.createEntityFromCsvLine
 import org.apache.beam.sdk.coders.Coder
 import org.apache.beam.sdk.transforms.DoFn
 import org.apache.beam.sdk.transforms.ParDo
@@ -62,3 +62,9 @@ fun <T : BeamEntity> applyCsvToEntityTransformation(
     val parsedEntityPCollection = input.apply("Parse CSV Lines to Entities", ParDo.of(doFn))
     return parsedEntityPCollection.setCoder(coder as Coder<T?>)
 }
+
+/* Test Serialization for Beam in Isolation */
+//    val entity: SerializableEntity<FredSeriesMod> = FredSeriesMod.Companion
+//    val coder: Coder<FredSeriesMod?> = NullableCoder.of(AvroCoder.of(FredSeriesMod::class.java))
+//    val doFn = ConvertCsvToEntityFn(entity, coder)
+//    SerializableUtils.ensureSerializable(doFn)

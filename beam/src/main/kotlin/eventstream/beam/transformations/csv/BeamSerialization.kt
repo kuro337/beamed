@@ -7,7 +7,11 @@ Input Params : PCollection<String> (CSV Lines) , BeamEntityClass
 Output : PCollection<T:BeamEntity>
 
 */
-import eventstream.beam.*
+import eventstream.beam.interfaces.entity.BeamEntity
+import eventstream.beam.interfaces.entity.createEntityFromCsvLine
+import eventstream.beam.interfaces.entity.getAvroCoder
+import eventstream.beam.interfaces.transformation.BeamTransformation
+import eventstream.beam.interfaces.transformation.TRANSFORMATION
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.beam.sdk.coders.Coder
 import org.apache.beam.sdk.coders.NullableCoder
@@ -23,6 +27,8 @@ class SerializeEntityFromCSVLines<T : BeamEntity> :
     BeamTransformation<SerializationParams<T>, PCollection<String>, PCollection<T>>() {
     private val logger = KotlinLogging.logger {}
     override val transformationType = TRANSFORMATION.CSV_TO_ENTITY
+
+
     override fun apply(input: PCollection<String>, params: SerializationParams<T>): PCollection<T> {
 
         val avroCoder = params.entityClass.getAvroCoder()

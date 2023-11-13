@@ -1,43 +1,56 @@
+/*
+
+Converts a PCollection<BeamEntity> to PCollection<GenericRecord>
+
+*/
 package eventstream.beam.transformations.parquet
 
-import eventstream.beam.BeamEntity
-import eventstream.beam.BeamTransformation
-import eventstream.beam.TRANSFORMATION
-import eventstream.beam.effects.WriteParquetCollection
-import org.apache.avro.Schema
+import eventstream.beam.interfaces.entity.BeamEntity
+import eventstream.beam.interfaces.entity.getGenericRecordAvroCoder
+import eventstream.beam.interfaces.entity.getParquetSchema
+import eventstream.beam.interfaces.transformation.BeamTransformation
+import eventstream.beam.interfaces.transformation.TRANSFORMATION
 import org.apache.avro.generic.GenericRecord
-import org.apache.beam.sdk.extensions.avro.coders.AvroCoder
 import org.apache.beam.sdk.transforms.MapElements
 import org.apache.beam.sdk.transforms.SerializableFunction
 import org.apache.beam.sdk.values.PCollection
 import org.apache.beam.sdk.values.TypeDescriptor
+import java.io.Serializable
 
-data class CollectionToGenRecordParams(val schema: Schema, val writeParquetPath: String? = null)
-object CollectionToGenericRecord :
-    BeamTransformation<CollectionToGenRecordParams, PCollection<BeamEntity>, PCollection<GenericRecord>>() {
+data class EntityToGenericRecordParams<T : BeamEntity>(val entityClass: Class<T>) : Serializable
+
+class CollectionToGenericRecord<T : BeamEntity>() :
+    BeamTransformation<EntityToGenericRecordParams<T>, PCollection<T>, PCollection<GenericRecord>>() {
     override val transformationType = TRANSFORMATION.ENTITY_TO_GENERIC_RECORD
 
     override fun apply(
-        input: PCollection<BeamEntity>,
-        params: CollectionToGenRecordParams
+        input: PCollection<T>,
+        params: EntityToGenericRecordParams<T>
     ): PCollection<GenericRecord> {
 
-        val schema = params.schema
+        println("Converting a PCollection<BeamEntity> to PCollection<GenericRecord>\nCollectionToGenericRecord.kt")
+
+        val schema = params.entityClass.getParquetSchema()
+
+        val genericCoder = params.entityClass.getGenericRecordAvroCoder()
+
+        println("Using Schema - $schema")
+        println("Using genericCoder - $genericCoder")
 
         val genericRecords = input
             .apply(
                 "Convert to GenericRecord",
                 MapElements.into(TypeDescriptor.of(GenericRecord::class.java))
-                    .via(SerializableFunction<BeamEntity, GenericRecord> { entity ->
+                    .via(SerializableFunction<T, GenericRecord> { entity ->
                         // Use the getAvroGenericRecord method from BeamEntity interface
                         entity.getAvroGenericRecord()
                     })
-            ).setCoder(AvroCoder.of(GenericRecord::class.java, schema))
+            ).setCoder(genericCoder)
 
 
-        params.writeParquetPath?.let { path ->
-            WriteParquetCollection.writeParquetCollectionToDisk(genericRecords, schema, path)
-        }
+//        params.writeParquetPath?.let { path ->
+//            WriteParquetCollection.writeParquetCollectionToDisk(genericRecords, schema, path)
+//        }
 
 
         return genericRecords

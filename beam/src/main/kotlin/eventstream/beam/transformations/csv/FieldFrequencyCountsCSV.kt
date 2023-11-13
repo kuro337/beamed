@@ -1,6 +1,6 @@
 package eventstream.beam.transformations.csv
 
-import eventstream.beam.BeamEntity
+import eventstream.beam.interfaces.entity.BeamEntity
 import org.apache.beam.sdk.transforms.*
 import org.apache.beam.sdk.values.KV
 import org.apache.beam.sdk.values.PCollection
