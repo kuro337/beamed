@@ -19,3 +19,5 @@ docs/*
 !docs/beam/
 !docs/generics/
 !docs/gradle/
+
+local_history.patch
