@@ -19,5 +19,7 @@ docs/*
 !docs/beam/
 !docs/generics/
 !docs/gradle/
+!docs/README.md
+!docs/eventstreaming_beam_kafka_flink_kotlin.png
 
 local_history.patch
