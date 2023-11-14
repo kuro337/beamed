@@ -19,7 +19,7 @@ import java.time.format.DateTimeParseException
 import java.util.regex.Pattern
 
 @DefaultSchema(JavaFieldSchema::class)
-class FredSeries @SchemaCreate constructor(
+data class FredSeries @SchemaCreate constructor(
     var id: String = "",
     var title: String = "",
     var observationStart: String = "",
@@ -148,7 +148,7 @@ class FredSeries @SchemaCreate constructor(
 
         @JvmStatic
         override fun serializeFromCsvLine(line: String): FredSeries? {
-            println("Serialize Delegated Fred Invoked $line")
+            // println("Serialize Delegated Fred Invoked $line")
 
             try {
                 val matcher = pattern.matcher(line + ",")

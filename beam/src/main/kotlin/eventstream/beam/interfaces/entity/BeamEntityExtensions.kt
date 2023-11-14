@@ -57,7 +57,7 @@ fun <T : BeamEntity> Class<T>.createEntityFromCsvLine(csvLine: String): T? {
 
 
 fun <T : BeamEntity> Class<T>.createEntityFromGenericRecord(record: GenericRecord): T? {
-    println("Calling serializeFromGenericRecord on Base Class")
+    //println("Calling serializeFromGenericRecord on Base Class")
 
     val method = this?.getDeclaredMethod("serializeFromGenericRecord", GenericRecord::class.java)
     return method?.invoke(null, record) as? T

@@ -9,7 +9,7 @@
 .gradle
 /build
 containers
-
+.idea
 /containers/.dockerbuild
 
 # Ignore everything in the docs directory

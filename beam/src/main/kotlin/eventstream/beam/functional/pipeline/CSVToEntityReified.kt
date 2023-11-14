@@ -1,3 +1,12 @@
+/*
+Read CSV Files to Entities
+
+@Usage
+
+val pipeline = Pipeline.create(options)
+pipeline.readCSVTransformAndWrite<FredSeries>(files, FredSeries::parseCsvToEntity)
+*/
+
 package eventstream.beam.functional.pipeline
 
 import eventstream.beam.interfaces.entity.BeamEntity
@@ -16,6 +25,7 @@ inline fun <reified T : BeamEntity> Pipeline.readCSVConvertToEntity(
     csvFiles: List<String>,
     noinline createEntityFromCsvLine: (String) -> T?
 ): PCollection<T> {
+
 
     logger.info { "Reading ${csvFiles.size} CSV Files and Converting to PCollection<${T::class.simpleName}> " }
 
@@ -41,12 +51,12 @@ inline fun <reified T : BeamEntity> Pipeline.readCSVConvertToEntity(
             }
         }))
 
+    // .setCoder(NullableCoder.of(T::class.java.getAvroCoder() as Coder<T>))
+
     logger.info { "Successfully Converted CSV to PCollection<${T::class.simpleName}> " }
 
+    //   return entityPCollection
     val avroCoder = AvroCoder.of(T::class.java)
     return entityPCollection.setCoder(NullableCoder.of(avroCoder))
 }
 
-// Usage in your pipeline:
-//val pipeline = Pipeline.create(options)
-//pipeline.readCSVTransformAndWrite<FredSeries>(files, FredSeries::parseCsvToEntity)

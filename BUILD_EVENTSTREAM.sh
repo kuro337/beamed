@@ -10,7 +10,6 @@ set -e
 ./gradlew :beam:publishToMavenLocal
 ./gradlew :app:build
 ./gradlew :kafka:build
-./gradlew :list:build
 
 echo "Build and publish tasks completed successfully"
 

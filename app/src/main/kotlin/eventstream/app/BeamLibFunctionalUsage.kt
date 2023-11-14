@@ -1,13 +1,17 @@
-//package eventstream.beam
-//
+//package eventstream.app
 //
 //import eventstream.beam.functional.pcollections.writeToParquet
-//import eventstream.beam.functional.pipeline.*
+//import eventstream.beam.functional.pipeline.logElements
+//import eventstream.beam.functional.pipeline.readCSVConvertToEntity
+//import eventstream.beam.functional.pipeline.toGenericRecords
 //import eventstream.beam.logger.BeamLogger
 //import eventstream.beam.models.FredSeries
 //import org.apache.beam.sdk.Pipeline
 //
+//
 //fun main() {
+//
+//    /* @Usage of Beam Library using Functional Utilities */
 //
 //    /* Read Lines from CSV , Serialize, Transform to Generic Record, and Write as Parquet Files */
 //
@@ -43,4 +47,7 @@
 //
 //
 //}
+//
+//
+//
 //

@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = "eventstream"
-include("app", "utilities", "beam", "kafka", "list")
+include("app", "utilities", "beam", "kafka")

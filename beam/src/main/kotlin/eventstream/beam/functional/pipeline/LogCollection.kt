@@ -11,7 +11,7 @@ fun <T> PCollection<T>.logElements(prefix: String = "Element: "): PCollection<T>
     return this.apply("LogElements", ParDo.of(object : DoFn<T, T>() {
         @ProcessElement
         fun processElement(@Element element: T, receiver: OutputReceiver<T>) {
-            logger.debug { "$prefix$element" }
+            logger.info { "$prefix$element" }
             receiver.output(element)
         }
     }))

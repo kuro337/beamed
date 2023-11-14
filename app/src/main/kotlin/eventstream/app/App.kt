@@ -1,25 +1,11 @@
 package eventstream.app
 
-fun main() {
+class App {
+    fun main() {
+        /*
 
-    /*
-       @Sample
+        Staging Application to use Functionality from Library.
 
-       - Using Functionality from Libraries
-
-
-    InMemoryPipeline.runCSVSchema("data/input/simple_data_noheaders.csv")
-
-    InMemoryPipeline.runCsvFedSeriesPipeline("data/input/simple_data_noheaders.csv")
-
-    InMemoryPipeline.runFredSeriesCategoricalAnalysis("data/input/simple_data_noheaders.csv")
-
-    InMemoryPipeline.runSimpleSchema()
-
-    SerializeModels.serializeFedSeries()
-
-    SerializeModels.serializeFedSeriesMod()
-
-    */
-
+         */
+    }
 }
