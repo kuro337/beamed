@@ -44,17 +44,56 @@ _Big Data Streaming & Processing_
 
 ## Usage
 
+Functional and Object Oriented Utilities that can be utilized with your own Entity Classes.
+
 <br/>
 
 - Simple Beam Pipeline to Process and Analyze Data and Persist Outputs
 
 ```kotlin
-package eventstream.beam
-
-import eventstream.beam.pipeline.InMemoryPipeline
+import eventstream.beam.*
 
 fun main() {
-    InMemoryPipeline.runFredSeriesCategoricalAnalysis("data/input/simple_data_noheaders.csv")
+    InMemoryPipeline.runCategoricalAnalysis("data/input/simple_data.csv")
+}
+```
+
+- Simply define classes for your Entities and leverage Beam in a runtime independent fashion using functionality
+  utilities.
+
+```kotlin
+import eventstream.beam.*
+
+fun main() {
+
+    /* @Usage of Beam Library using Functional Utilities */
+
+    /* Read Lines from CSV , Serialize, Transform to Generic Record, and Write as Parquet Files */
+
+    Pipeline.create().apply {
+        readCSVConvertToEntity<YourEntityClass>(
+            listOf("data/input/yourentities.csv"),
+            FredSeries::serializeFromCsvLine
+        ).apply {
+            toGenericRecords<YourEntityClass>().apply {
+                logElements("Serialized Entities: ")
+            }.apply {
+                writeToParquet<FredSeries>("data/output/beam/parquet/")
+            }
+        }
+    }.run().waitUntilFinish()
+
+    /* Reading Back Transformed Parquet Files */
+
+    Pipeline.create().apply {
+        readParquetToGenericRecord<YourEntityClass>(
+            listOf("data/output/beam/parquet/*",)
+        ).apply {
+            convertToBeamEntity<YourEntityClass>()
+        }.apply {
+            logElements().also { BeamLogger.logger.info { "Successfully Serialized from Parquet Files." } }
+        }
+    }.run().waitUntilFinish()
 }
 ```
 
@@ -63,9 +102,7 @@ fun main() {
 - Using `eventstream.kafka` package to interact with your Cluster.
 
 ```kotlin
-package eventstream.kafka
-
-import eventstream.kafka.client.KafkaController
+import eventstream.kafka.*
 
 fun main() {
     val logger = KotlinLogging.logger("Kafka.EntryPoint")
@@ -101,13 +138,11 @@ fun main() {
 - Processing Data from an Object Store and using Beam and Flink for declarative Data Processing
 
 ```kotlin
-package eventstream.beam
-
-import eventstream.beam.pipeline.InMemoryPipeline
+import eventstream.beam.*
 
 fun main() {
 
-    FlinkS3Pipeline.run("s3://bucket_w_series")
+    FlinkS3Pipeline.run("s3://bucket_with_series")
 
     /* 
     
@@ -135,11 +170,19 @@ fun main() {
   using `Docker` or
   deploying directly to `Kubernetes`
 
+- `./BUILD_EVENTSTREAM.sh` - Bash Script to compile and build and publish libraries to `Maven Central` if users want to
+  extend the utilities or fork the library.
+
 <hr/>
 
 ##### Building and Running
 
 ```bash
+# Run Tests, Compile, Build, and Publish Library
+./BUILD_EVENTSTREAM.sh
+
+## Individual Commands (Optionally)
+
 # Build all Packages
 gradle clean build
 
@@ -160,11 +203,24 @@ gradle checkBytecodeVersion
 
 <hr/>
 
+###### Additional Concepts and Documentation
 
-Additionally, in case you need to launch a Flink and Kafka Cluster
+Launching a Fully Functional Kafka and Flink Cluster on k8
 
 - [Flink](k8/flink/README.md): `k8/flink`
 - [Kafka](k8/kafka/README.md): `k8/kafka`
+
+Beam Concepts
+
+- [Beam](docs/beam): `docs/beam`
+
+Generics in Kotlin
+
+- [Generics](docs/generics/reified.md): `docs/generics`
+
+Gradle Docs for Writing and Publishing Large Library Codebases
+
+- [Gradle](docs/gradle/multiapp_setup.md): `docs/gradle`
 
 <hr/>
 

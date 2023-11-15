@@ -16,7 +16,10 @@ containers
 docs/*
 
 # But not these folders and their contents
-!docs/beam/
+!docs/beam/concepts.md
+!docs/beam/interface.md
+!docs/beam/testing
+
 !docs/generics/
 !docs/gradle/
 !docs/README.md

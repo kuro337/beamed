@@ -66,7 +66,7 @@ fun main() {
     val appleProducer = PostgresProducer()
     val bananaProducer = DuckDBProducer()
 
-    // Thanks to 'out', we can pass a Producer<Postgres> where Producer<Database> is expected
+
     processDatabase(appleProducer)  // Output: Produced a Postgres
     processDatabase(bananaProducer) // Output: Produced a DuckDB
 

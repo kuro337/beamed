@@ -13,7 +13,6 @@ repositories {
 
 java {
     toolchain {
-        //languageVersion.set(JavaLanguageVersion.of(9))
         languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
@@ -31,8 +30,7 @@ allprojects {
 
     plugins.withType<JavaPlugin> {
         extensions.configure<JavaPluginExtension> {
-            //sourceCompatibility = JavaVersion.VERSION_1_9
-            //  targetCompatibility = JavaVersion.VERSION_1_9
+
             sourceCompatibility = JavaVersion.VERSION_11
             targetCompatibility = JavaVersion.VERSION_11
         }
@@ -67,6 +65,27 @@ tasks.register("checkBytecodeVersion") {
         }
     }
 }
+
+/*
+For Java 9 Target, Change to
+
+java {
+    toolchain {
+        //languageVersion.set(JavaLanguageVersion.of(9))
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
+}
+
+allprojects {
+    ....
+    plugins.withType<JavaPlugin> {
+        extensions.configure<JavaPluginExtension> {
+            sourceCompatibility = JavaVersion.VERSION_1_9
+            targetCompatibility = JavaVersion.VERSION_1_9
+        }
+    }
+*/
+
 
 /*
 Java Class Version Reference
