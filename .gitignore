@@ -5,6 +5,7 @@
 /beam/src/main/resources/application.properties
 /beam/build/
 /beam/build/
+/grpc/build/
 .idea
 .gradle
 /build
@@ -19,7 +20,7 @@ docs/*
 !docs/beam/concepts.md
 !docs/beam/interface.md
 !docs/beam/testing
-
+!docs/grpc
 !docs/generics/
 !docs/gradle/
 !docs/README.md

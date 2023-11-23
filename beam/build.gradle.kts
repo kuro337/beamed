@@ -6,9 +6,18 @@ plugins {
 }
 
 dependencies {
-    api("org.slf4j:slf4j-simple:2.0.3")
+
+    configurations {
+        all {
+            exclude(group = "org.slf4j", module = "slf4j-simple")
+        }
+    }
+
+    implementation("ch.qos.logback:logback-classic:1.4.11")
+
     api("io.github.oshai:kotlin-logging-jvm:5.1.0")
-    api("eventstream:utilities:1.0.0")
+
+    //api("eventstream:utilities:1.0.0")
 
     api("org.jetbrains.kotlin:kotlin-reflect:1.9.20")
 
@@ -22,6 +31,8 @@ dependencies {
     api("software.amazon.awssdk:s3:2.21.10")
 
     /* Test Deps */
+    testImplementation("eventstream:utilities:1.0.0")
+
     testImplementation("org.apache.beam:beam-sdks-java-test-utils:2.51.0")
     testImplementation("junit:junit:4.13.2") // JUnit 4 for TestPipeline support
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.20")

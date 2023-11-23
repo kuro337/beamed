@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package eventstream.proto;
+
+message Foo {
+    string name = 1;
+    int32 age = 2;
+    string gender = 3;
+    double income = 4;
+    repeated string some_list = 5;  // List of strings
+}
+
+service FooService {
+    rpc ProcessFoo (Foo) returns (FooResponse) {}
+}
+
+message FooResponse {
+}

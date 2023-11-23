@@ -26,12 +26,4 @@
         //  implementation("ch.qos.logback:logback-classic:1.4.11") // Logging with Time and Powerful
         api("io.github.oshai:kotlin-logging-jvm:5.1.0")
 
-        NOTE: If runtime Warning occurs for Logback and Slf4j when using Logback - check deps for usage of Slf4j
-
-        Check if any Transitive Dependency has slf4j
-
-
-
-
-
         -->

@@ -1,0 +1,59 @@
+/*  ./gradlew :grpc:build */
+
+syntax = "proto3";
+
+package eventstream.proto;
+
+// Service for generating embeddings from any string
+service EmbeddingService {
+    rpc GenerateStringEmbeddings (StringRequest) returns (EmbeddingResponse) {}
+
+    rpc GenerateBatchStringEmbeddings (BatchStringRequest) returns (BatchEmbeddingResponse) {}
+
+    rpc CalculateSimilarities (SimilarityRequest) returns (SimilarityResponse) {} // New RPC method
+
+}
+
+// Request containing a generic string
+message StringRequest {
+    string input = 1;
+}
+
+// Response with embeddings
+message EmbeddingResponse {
+    repeated float embedding = 1; // Array of floats for embeddings
+}
+
+// Request Type for List<String> for Strings to Embed
+message BatchStringRequest {
+    repeated string inputs = 1; // List of strings
+}
+
+// Type for List<List<Float>> for embeddings
+message BatchEmbeddingResponse {
+    repeated EmbeddingList embeddingLists = 1; // List of lists of embeddings
+}
+
+// List<Float> for embeddings
+message EmbeddingList {
+    repeated float embeddings = 1; // Single list of embeddings
+}
+
+/* Get Similarities for a List<String> */
+
+// New request and response messages for similarity calculation
+message SimilarityRequest {
+    repeated string queries = 1;
+    repeated string data = 2;
+}
+
+message SimilarityResponse {
+    // Define the structure to return similarity results
+    // Example: Map of query to its similarity scores with each data point
+    map<string, SimilarityScores> similarities = 1;
+}
+
+message SimilarityScores {
+    repeated float scores = 1; // Similarity scores for a single query
+}
+
