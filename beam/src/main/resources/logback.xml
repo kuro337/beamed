@@ -13,25 +13,3 @@
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
-
-        <!--
-        import io.github.oshai.kotlinlogging.KotlinLogging
-
-        private val logger = KotlinLogging.logger { }
-
-
-        build.gradle.kts for adding Logging
-
-        //  api("org.slf4j:slf4j-simple:2.0.3")                     // Simple Logging
-        //  implementation("ch.qos.logback:logback-classic:1.4.11") // Logging with Time and Powerful
-        api("io.github.oshai:kotlin-logging-jvm:5.1.0")
-
-        NOTE: If runtime Warning occurs for Logback and Slf4j when using Logback - check deps for usage of Slf4j
-
-        Check if any Transitive Dependency has slf4j
-
-
-
-
-
-        -->
