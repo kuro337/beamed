@@ -1,14 +1,18 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    java
 
+    java
 }
+
+/* Specify Repositorites for Dependency Management for Modules */
 
 repositories {
     mavenLocal()
     mavenCentral()
     gradlePluginPortal()
+    maven { url = uri("https://packages.confluent.io/maven/") }
+
 }
 
 java {
@@ -18,8 +22,11 @@ java {
 }
 
 allprojects {
-
-
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url = uri("https://packages.confluent.io/maven/") }
+    }
     tasks.withType<Test> {
         useJUnitPlatform()
 

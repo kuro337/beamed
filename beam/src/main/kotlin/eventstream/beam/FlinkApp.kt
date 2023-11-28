@@ -1,4 +1,5 @@
-package eventstream.app
+package eventstream.beam
+
 
 import eventstream.beam.functional.pipeline.convertToBeamEntity
 import eventstream.beam.functional.pipeline.logElements
@@ -9,23 +10,24 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.beam.sdk.Pipeline
 
 fun main() {
-    /*
-
-    Staging Application to use Functionality from Library.
-
-     */
 
 
-    // Set Logback configuration file
     System.setProperty("logback.configurationFile", "logback.xml")
 
-    // Initialize logger
     val logger = KotlinLogging.logger {}
 
 
-    logger.info { "Test Log New " }
+    logger.info { "Testing Logs" }
 
     logger.info { "Starting Kafka Reader App" }
+
+    /* Read from S3 and Serialize CSV */
+
+//    PipelineFactory.createWithAwsCredsFromEnv().apply {
+//        readCSVConvertToEntity(listOf("s3://beam-kuro/fred_series.csv"), FredSeries::serializeFromCsvLine).apply {
+//            logElements("Serialized from S3 : ")
+//        }
+//    }.run().waitUntilFinish()
 
     Pipeline.create().apply {
         readAllParquetFromDirectory<FredSeries>(
@@ -38,6 +40,20 @@ fun main() {
     }.run().waitUntilFinish()
 
 
+//    /* Kick off Job to Flink Cluster - Check k8/flink/deploy_job.md */
+
+//    val pipeline = createFlinkPipeline(jobName = "MyFlinkJob")
+//
+//    val fileLines =
+//        pipeline.readCSVConvertToEntity(listOf("s3://beam-kuro/fred_series.csv"), FredSeries::serializeFromCsvLine)
+//
+//    // Use the printLines function
+//    fileLines.logElements("Serialized from S3: ")
+//
+//    pipeline.run().waitUntilFinish()
+
+
+//
 //    val pipeline = Pipeline.create(/* your pipeline options */)
 //
 //    println("Testing new log")
@@ -58,5 +74,7 @@ fun main() {
 //
 //    pipeline.run().waitUntilFinish()
 
+
 }
+
 

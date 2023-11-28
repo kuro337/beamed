@@ -1,38 +1,37 @@
+/*
+./gradlew :beam:run
+*/
+
 plugins {
     id("eventstream.kotlin-application-conventions")
     id("maven-publish")
-    id("java-library")
     application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("java-library")
 }
 
 dependencies {
 
-    configurations {
-        all {
-            exclude(group = "org.slf4j", module = "slf4j-simple")
-        }
-    }
-
     implementation("ch.qos.logback:logback-classic:1.4.11")
+    implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
 
-    api("io.github.oshai:kotlin-logging-jvm:5.1.0")
+    api("org.apache.beam:beam-sdks-java-core:2.51.0")
 
-    //api("eventstream:utilities:1.0.0")
-
-    api("org.jetbrains.kotlin:kotlin-reflect:1.9.20")
-
-    api("org.apache.commons:commons-text")
-    api("org.apache.beam:beam-sdks-java-core:2.50.0")
-    api("org.apache.beam:beam-runners-direct-java:2.50.0")
-    api("org.apache.beam:beam-runners-flink-1.16:2.50.0")
-    api("org.apache.beam:beam-sdks-java-io-amazon-web-services2:2.51.0")
-    api("org.apache.beam:beam-sdks-java-io-parquet:2.51.0")
+    implementation("org.apache.beam:beam-runners-direct-java:2.51.0")
+    implementation("org.apache.beam:beam-runners-flink-1.16:2.51.0")
+    implementation("org.apache.beam:beam-sdks-java-io-amazon-web-services2:2.51.0")
+    implementation("org.apache.beam:beam-sdks-java-io-parquet:2.51.0")
+    implementation("org.apache.beam:beam-sdks-java-io-kafka:2.51.0")     // 2.5.2 Causes Slf4J Failures
+    implementation("org.apache.kafka:kafka-clients:3.6.0") // Kafka Interaction Dependency
+    implementation("io.confluent:kafka-avro-serializer:7.5.1")
+    implementation("io.confluent:kafka-schema-registry-client:7.5.1")
     implementation("org.apache.hadoop:hadoop-core:1.2.1")
-    api("software.amazon.awssdk:s3:2.21.10")
+    implementation("software.amazon.awssdk:s3:2.21.10")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.20")
+    implementation("org.apache.commons:commons-text")
 
     /* Test Deps */
     testImplementation("eventstream:utilities:1.0.0")
-
     testImplementation("org.apache.beam:beam-sdks-java-test-utils:2.51.0")
     testImplementation("junit:junit:4.13.2") // JUnit 4 for TestPipeline support
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.9.20")
@@ -43,6 +42,18 @@ dependencies {
 }
 
 
+/* Build ShadowJar for Flink */
+
+tasks.shadowJar {
+    mergeServiceFiles()
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    transform(com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer::class.java)
+    isZip64 = true
+    archiveFileName.set("FlinkApp-all.jar")
+    manifest {
+        attributes["Main-Class"] = "eventstream.beam.FlinkAppKt"
+    }
+}
 
 java {
     withJavadocJar()
@@ -50,7 +61,7 @@ java {
 }
 
 application {
-    mainClass.set("eventstream.beam.AppKt")
+    mainClass.set("eventstream.beam.FlinkAppKt")
 }
 
 
@@ -60,7 +71,7 @@ publishing {
             from(components["java"])
             groupId = "eventstream"
             artifactId = "beam"
-            version = "1.0.2"
+            version = "1.0.3"
         }
     }
     repositories {
@@ -75,7 +86,7 @@ val libJar = tasks.register("libJar", Jar::class) {
 
     archiveBaseName.set("eventstream")
     archiveClassifier.set("beam")
-    archiveVersion.set("1.0.2")
+    archiveVersion.set("1.0.3")
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
@@ -91,6 +102,8 @@ tasks.named("build") {
 
 
 /*
+jar tf FlinkApp-all.jar | grep 'org/slf4j'
+jar tf FlinkApp-all.jar | grep 'ch/qos/logback'
 
 ./gradlew :utilities:build
 ./gradlew :utilities:publishToMavenLocal
@@ -99,5 +112,5 @@ tasks.named("build") {
 
 cd ~/.m2/repository/eventstream/beam/1.0.2
 jar tf beam-1.0.2.jar
-
  */
+

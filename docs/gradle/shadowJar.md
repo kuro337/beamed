@@ -53,3 +53,38 @@ unzip -l beam/build/libs/beam-eventstreaming.jar | grep FlinkRunner
 2515  1980-02-01 00:00   org/apache/beam/runners/flink/FlinkRunner$1.class
 1625  1980-02-01 00:00   org/apache/beam/runners/flink/FlinkRunnerRegistrar$Runner.class
 ```
+
+```kotlin
+tasks.shadowJar {
+    mergeServiceFiles()
+
+    /* Different Configurations */
+    configurations = listOf(
+        project.configurations.runtimeClasspath.get(),
+        project.configurations.runtimeOnly.get(),
+        project.configurations.implementation.get(),
+        project.configurations.apiElements.get(),
+        project.configurations.compileClasspath.get()
+    ).onEach { it.isCanBeResolved = true }
+
+    /* Excluding Dependencies for including deps' JAR files  */
+
+    dependencies {
+        exclude("org.slf4j:slf4j-simple")
+        exclude("org.slf4j:slf4j-nop")
+        exclude("org.slf4j:slf4j-jdk14")
+        exclude("org.slf4j:slf4j-log4j12")
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    transform(com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer::class.java)
+
+    isZip64 = true
+    archiveFileName.set("KafkaAppLibUsage-all.jar")
+
+    manifest {
+        attributes["Main-Class"] = "eventstream.app.AppKt"
+    }
+}
+```

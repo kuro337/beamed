@@ -2,10 +2,21 @@ package eventstream.beam.functional.pipeline
 
 import eventstream.beam.interfaces.entity.BeamEntity
 import eventstream.beam.logger.BeamLogger.logger
-
 import org.apache.beam.sdk.transforms.DoFn
 import org.apache.beam.sdk.transforms.ParDo
 import org.apache.beam.sdk.values.PCollection
+
+/* PCollection<String>.printLines("Line from Collection - ") */
+
+fun PCollection<String>.printLines(prefix: String = "Line: "): PCollection<String> {
+    return this.apply("PrintLines", ParDo.of(object : DoFn<String, String>() {
+        @ProcessElement
+        fun processElement(@Element line: String, receiver: OutputReceiver<String>) {
+            logger.info { "$prefix$line" }
+            receiver.output(line)
+        }
+    }))
+}
 
 
 fun <T : BeamEntity> PCollection<T>.printBeamEntities(prefix: String = "Element: "): PCollection<T> {

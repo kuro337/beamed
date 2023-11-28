@@ -3,6 +3,7 @@ package eventstream.beam.pipelines
 import eventstream.beam.interfaces.pipeline.BeamPipeline
 import eventstream.beam.interfaces.pipeline.BeamPipelineOptions
 import eventstream.beam.interfaces.pipeline.PIPELINE
+import eventstream.beam.logger.BeamLogger
 import eventstream.beam.pipelines.decorators.PipelineType
 import eventstream.beam.pipelines.options.attachAWSCredsToFlinkPipelineOptions
 import eventstream.beam.pipelines.options.createFlinkPipelineOptions
@@ -80,6 +81,27 @@ class FlinkS3Pipeline(private val options: BeamPipelineOptions) : BeamPipeline {
     }
 }
 
+
+fun createFlinkPipeline(
+    jobName: String,
+    flinkMasterURL: String? = System.getenv("FLINK_MASTER_URL"), // "flink-cluster-session-rest:8081",
+    awsAccessKey: String? = System.getenv("AWS_ACCESS_KEY_ID"),
+    awsSecretKey: String? = System.getenv("AWS_SECRET_ACCESS_KEY"),
+    awsRegion: String? = System.getenv("AWS_REGION")
+): Pipeline {
+
+    BeamLogger.logger.info { "Using URL $flinkMasterURL" }
+
+    // Create FlinkPipelineOptions with job name and Flink master URL
+    val options = createFlinkPipelineOptions(flinkMasterURL!!, jobName)
+
+    // Attach AWS credentials if provided
+    if (!awsAccessKey.isNullOrBlank() && !awsSecretKey.isNullOrBlank()) {
+        attachAWSCredsToFlinkPipelineOptions(options, awsAccessKey, awsSecretKey, awsRegion)
+    }
+
+    return Pipeline.create(options)
+}
 /*
         val credentials: AwsCredentials =
         AwsBasicCredentials.create("******", "***************")

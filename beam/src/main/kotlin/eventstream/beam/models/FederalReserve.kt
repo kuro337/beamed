@@ -3,6 +3,7 @@ package eventstream.beam.models
 import eventstream.beam.interfaces.entity.BeamEntity
 import eventstream.beam.interfaces.entity.CsvParsable
 import eventstream.beam.interfaces.entity.ParquetParsable
+import eventstream.beam.logger.BeamLogger
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.avro.Schema
 import org.apache.avro.generic.GenericRecord
@@ -148,7 +149,6 @@ data class FredSeries @SchemaCreate constructor(
 
         @JvmStatic
         override fun serializeFromCsvLine(line: String): FredSeries? {
-            // println("Serialize Delegated Fred Invoked $line")
 
             try {
                 val matcher = pattern.matcher(line + ",")
@@ -183,10 +183,10 @@ data class FredSeries @SchemaCreate constructor(
                     notes = if (splitCols[10].isNotBlank()) splitCols[10].trim() else ""
                 )
             } catch (e: IllegalArgumentException) {
-                println("Error with CSV line format: $line; ${e.message}")
+                BeamLogger.logger.error { "Error with CSV line format: $line; ${e.message}" }
                 return null
             } catch (e: Exception) {
-                println("Unexpected error processing CSV line: $line; ${e.message}")
+                BeamLogger.logger.error { "Unexpected error processing CSV line: $line; ${e.message}" }
                 return null
             }
         }

@@ -1,3 +1,5 @@
+/* Specify Repositorites for Build Scripts in Settings  */
+
 pluginManagement {
     repositories {
         mavenLocal()

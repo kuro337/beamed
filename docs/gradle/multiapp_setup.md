@@ -185,8 +185,17 @@ dependencies {
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.8.1")
 
 }
-
-
+/* Excluding Certain Dependencies From being Pulled in Transitively */
+configurations {
+    all {
+        "implementation" {
+            exclude(group = "org.slf4j", module = "slf4j-simple")
+            exclude(group = "org.slf4j", module = "slf4j-nop")
+            exclude(group = "org.slf4j", module = "slf4j-jdk14")
+            exclude(group = "org.slf4j", module = "slf4j-log4j12")
+        }
+    }
+}
 
 java {
     withJavadocJar()
