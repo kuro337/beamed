@@ -4,8 +4,11 @@ package eventstream.kafka.client
 import eventstream.kafka.config.KafkaConfig
 import eventstream.kafka.consumer.KafkaConsumerWrapper
 import eventstream.kafka.controller.KafkaControllerLogging
+import eventstream.kafka.producer.KafkaMessage
 import eventstream.kafka.producer.KafkaProducerWrapper
 import io.github.oshai.kotlinlogging.KotlinLogging
+import org.apache.kafka.clients.admin.ConsumerGroupDescription
+import org.apache.kafka.common.TopicPartition
 import java.time.Duration
 
 
@@ -46,17 +49,39 @@ class KafkaController(private val config: KafkaConfig) {
         kafkaProducer.close()
     }
 
+    fun getTopics(print: Boolean = true): Set<String> {
+        return kafkaClient.getTopics().also {
+            if (print) logger.info { "Topics for Broker :$it" }
+        }
+    }
+
+
+    fun printTopicMetadata(topicName: String): String {
+        val topicMetadata = kafkaClient.getTopicInformation(topicName)
+        logger.info { "<Metadata> for topic $topicName: $topicMetadata" }
+        return topicMetadata
+    }
+
     fun createTopic(topicName: String, partitions: Int, replicationFactor: Short) {
         kafkaClient.createTopic(topicName, partitions, replicationFactor)
         logger.info { "Successfully created Topic: $topicName" }
     }
 
+    fun deleteTopic(topicName: String) {
+        kafkaClient.deleteTopic(topicName)
+    }
+
     fun sendMessage(topicName: String, key: String, message: String) {
         kafkaProducer.sendMessage(topicName, key, message)
         logger.info { "Successfully sent Event to: $topicName with Key $key" }
-
     }
 
+    fun sendMessages(messages: List<KafkaMessage>) {
+        messages.forEach { message ->
+            kafkaProducer.sendMessage(message.topic, message.key, message.message)
+            logger.info { "Successfully sent Event to: ${message.topic} with Key ${message.key}" }
+        }
+    }
 
     /**
      * #### `ConsumerRead`
@@ -78,30 +103,56 @@ class KafkaController(private val config: KafkaConfig) {
      * @constructor KafkaController
      * @sample eventstream.kafka.client.KafkaController.readMessages
      */
-    fun readMessages(topicName: String, timeoutMillis: Long, offSet: String = "latest") {
-        val kafkaConsumerWrapper = KafkaConsumerWrapper(config, offSet)
+    fun readMessages(
+        topicName: String,
+        groupId: String,
+        timeoutMillis: Long,
+        offSet: String = "latest",
+        print: Boolean = true
+    ): List<String> {
+        val kafkaConsumerWrapper = KafkaConsumerWrapper(config, groupId, offSet)
         kafkaConsumerWrapper.subscribe(listOf(topicName))
+        val messages = mutableListOf<String>()
 
         try {
             val records = kafkaConsumerWrapper.poll(Duration.ofMillis(timeoutMillis))
-            for (record in records) {
-                logger.info { "Read Event from Offset record from topic ${record.topic()} with key ${record.key()}: ${record.value()}" }
+            records.forEach { record ->
+                record.timestampType()
+                messages.add(record.value()).also {
+                    if (print) logger.info {
+                        """
+                    Topic:${record.topic()}:Key:${record.key()}:Value:${record.value()}
+                    Timestamp: ${record.timestamp()}
+                    Timestamp: ${record.timestampType()}
+                    """.trimIndent()
+                    }
+                }
             }
         } finally {
             kafkaConsumerWrapper.close()
         }
+        return messages
     }
 
     /*
+    * Consumer Groups and Offsets
+    * Consumer Group is created implicitly for each Consumer for a Topic Partition
+    * Can define a Consumer Group Explicitly when Consuming Messages as well for more granularity
+    *
+     */
 
-    @KafkaConsumer
-
-    fun readMessages(topic: String) {
-        // Implement Kafka Consumer
-        val consumer = KafkaConsumer<String, String>(config.toProperties())
+    // Expose KafkaClient's consumer group functionalities
+    fun listConsumerGroups(): List<String> {
+        return kafkaClient.listConsumerGroups()
     }
 
-    */
+    fun describeConsumerGroup(groupId: String): ConsumerGroupDescription {
+        return kafkaClient.describeConsumerGroup(groupId)
+    }
+
+    fun getConsumerLag(groupId: String): Map<TopicPartition, Long> {
+        return kafkaClient.getConsumerLag(groupId)
+    }
 
 
 }

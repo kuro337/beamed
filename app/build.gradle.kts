@@ -9,7 +9,7 @@ plugins {
 
 dependencies {
 
-    implementation("eventstream:beam:1.0.3")
+    api("eventstream:beam:1.0.4")
 
     implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
@@ -27,7 +27,7 @@ tasks.shadowJar {
     transform(com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer::class.java)
 
     isZip64 = true
-    archiveFileName.set("KafkaAppLibUsage-all.jar")
+    archiveFileName.set("FlinkApp-all.jar")
 
     manifest {
         attributes["Main-Class"] = "eventstream.app.AppKt"

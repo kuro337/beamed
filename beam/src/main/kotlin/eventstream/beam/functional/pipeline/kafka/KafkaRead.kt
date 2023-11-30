@@ -1,5 +1,7 @@
 package eventstream.beam.functional.pipeline.kafka
 
+import eventstream.beam.logger.BeamLogger.logger
+import eventstream.beam.pipelines.options.KafkaPipelineOptions
 import org.apache.beam.sdk.Pipeline
 import org.apache.beam.sdk.io.kafka.KafkaIO
 import org.apache.beam.sdk.values.KV
@@ -53,22 +55,62 @@ object KafkaKubeOptions {
 fun Pipeline.readFromKafka(
     bootstrapServers: String,
     topic: String,
+    groupId: String = "$topic-default",
     saslJaasConfig: String = KafkaKubeOptions.saslJaasConfig,
     securityProtocol: String = KafkaKubeOptions.securityProtocol,
     saslMechanism: String = KafkaKubeOptions.saslMechanism
 ): PCollection<KV<String, String>> {
+
+
+    val consumerConfig = mapOf(
+        "group.id" to groupId,
+        "security.protocol" to securityProtocol,
+        "sasl.mechanism" to saslMechanism,
+        SaslConfigs.SASL_JAAS_CONFIG to saslJaasConfig
+    )
+
     val kafkaRead = KafkaIO.read<String, String>()
         .withBootstrapServers(bootstrapServers)
         .withTopic(topic)
         .withKeyDeserializer(StringDeserializer::class.java)
         .withValueDeserializer(StringDeserializer::class.java)
-        .withConsumerConfigUpdates(
-            mapOf(
-                "security.protocol" to securityProtocol,
-                "sasl.mechanism" to saslMechanism,
-                SaslConfigs.SASL_JAAS_CONFIG to saslJaasConfig
-            )
-        )
+        .withConsumerConfigUpdates(consumerConfig)
+        .withoutMetadata()
+
+    return this.apply("Read from Kafka topic $topic", kafkaRead)
+}
+
+// KafkaReadTransform.kt
+fun Pipeline.readFromKafka(
+    topic: String,
+    groupId: String = "$topic-default",
+    readFromEarliest: Boolean = false
+): PCollection<KV<String, String>> {
+    val offsetResetStrategy = if (readFromEarliest) "earliest" else "latest"
+
+    logger.info { "Creating Streaming Pipeline to read from ${offsetResetStrategy} for $topic" }
+
+    val kafkaOptions = this.options.`as`(KafkaPipelineOptions::class.java)
+
+    logger.info { "SASL JAAS Config: ${kafkaOptions.getSaslJaasConfig()}" }
+    logger.info { "Security Protocol: ${kafkaOptions.getSecurityProtocol()}" }
+    logger.info { "SASL Mechanism: ${kafkaOptions.getSaslMechanism()}" }
+
+
+    val consumerConfig = mapOf(
+        "group.id" to groupId,
+        "security.protocol" to kafkaOptions.getSecurityProtocol(),
+        "sasl.mechanism" to kafkaOptions.getSaslMechanism(),
+        SaslConfigs.SASL_JAAS_CONFIG to kafkaOptions.getSaslJaasConfig(),
+        "auto.offset.reset" to offsetResetStrategy
+    )
+
+    val kafkaRead = KafkaIO.read<String, String>()
+        .withBootstrapServers(kafkaOptions.getBootstrapServers())
+        .withTopic(topic)
+        .withKeyDeserializer(StringDeserializer::class.java)
+        .withValueDeserializer(StringDeserializer::class.java)
+        .withConsumerConfigUpdates(consumerConfig)
         .withoutMetadata()
 
     return this.apply("Read from Kafka topic $topic", kafkaRead)

@@ -49,9 +49,13 @@ tasks.shadowJar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     transform(com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer::class.java)
     isZip64 = true
-    archiveFileName.set("FlinkApp-all.jar")
+
+    archiveBaseName.set("KafkaApp")
+    archiveClassifier.set("pipeline")
+
+
     manifest {
-        attributes["Main-Class"] = "eventstream.beam.FlinkAppKt"
+        attributes["Main-Class"] = "eventstream.beam.KafkaAppKt"
     }
 }
 
@@ -61,17 +65,28 @@ java {
 }
 
 application {
-    mainClass.set("eventstream.beam.FlinkAppKt")
+    mainClass.set("eventstream.beam.KafkaAppKt")
 }
-
 
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            from(components["java"])
-            groupId = "eventstream"
             artifactId = "beam"
-            version = "1.0.3"
+
+            from(components["java"])
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+
+            groupId = "eventstream"
+            version = "1.0.4"
+
+
         }
     }
     repositories {
@@ -79,29 +94,33 @@ publishing {
     }
 }
 
-val libJar = tasks.register("libJar", Jar::class) {
-    dependsOn(":utilities:classes")
-
-    from(sourceSets["main"].output)
-
-    archiveBaseName.set("eventstream")
-    archiveClassifier.set("beam")
-    archiveVersion.set("1.0.3")
-
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-}
-
-artifacts {
-    add("archives", tasks.named("libJar"))
-}
-
-tasks.named("build") {
-    dependsOn(tasks.named("libJar"))
-}
+//val libJar = tasks.register("libJar", Jar::class) {
+//    dependsOn(":utilities:classes")
+//
+//    from(sourceSets["main"].output)
+//
+//    archiveBaseName.set("eventstream")
+//    archiveClassifier.set("beam")
+//    archiveVersion.set("1.0.4")
+//
+//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+//
+//}
+//
+//artifacts {
+//    add("archives", tasks.named("libJar"))
+//}
+//
+//tasks.named("build") {
+//    dependsOn(tasks.named("libJar"))
+//}
 
 
 /*
+
+https://docs.gradle.org/current/userguide/publishing_maven.html
+
+
 jar tf FlinkApp-all.jar | grep 'org/slf4j'
 jar tf FlinkApp-all.jar | grep 'ch/qos/logback'
 

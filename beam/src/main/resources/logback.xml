@@ -8,6 +8,11 @@
 
         </encoder>
     </appender>
+
+    <!-- Packages logger configuration -->
+    <logger name="org.apache.kafka" level="WARN"/>
+    <logger name="org.apache.beam" level="WARN"/>
+
     <!-- Root logger configuration -->
     <root level="info">
         <appender-ref ref="STDOUT"/>

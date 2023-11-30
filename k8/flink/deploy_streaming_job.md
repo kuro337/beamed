@@ -197,5 +197,7 @@ java -Dlogback.debug=true -jar app/build/libs/KafkaAppLibUsage-all.jar
 
 java -jar app/build/libs/KafkaAppLibUsage-all.jar
 
+docker build -t flink-streaming-app-kafka -f containers/flink/streaming-kafka/Dockerfile .
+
 
 ```

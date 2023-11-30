@@ -9,7 +9,7 @@ application {
 }
 
 dependencies {
-    implementation("org.slf4j:slf4j-simple:2.0.3")
+    implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("io.github.oshai:kotlin-logging-jvm:5.1.0")
     implementation("org.apache.kafka:kafka-clients:3.6.0")
 
@@ -17,8 +17,8 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveBaseName.set("kafka-eventstreaming")
-    archiveClassifier.set("")
+    archiveBaseName.set("KafkaInserter")
+    archiveClassifier.set("all")
     isZip64 = true
     manifest {
         attributes(

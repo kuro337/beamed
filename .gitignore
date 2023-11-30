@@ -11,7 +11,7 @@
 /build
 containers
 .idea
-/containers/.dockerbuild
+/containers/.dockerbuild.md
 
 # Ignore everything in the docs directory
 docs/*
