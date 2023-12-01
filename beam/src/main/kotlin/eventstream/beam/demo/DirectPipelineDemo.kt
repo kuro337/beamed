@@ -2,7 +2,14 @@
 //
 //
 //import eventstream.beam.*
+//import eventstream.beam.interfaces.entity.BeamEntity
+//import eventstream.beam.interfaces.pipeline.BeamPipeline
+//import eventstream.beam.interfaces.pipeline.BeamPipelineOptions
+//import eventstream.beam.interfaces.pipeline.PIPELINE
 //import eventstream.beam.pipeline.decorators.PipelineType
+//import eventstream.beam.pipelines.decorators.PipelineType
+//import eventstream.beam.read.CSVReadParameters
+//import eventstream.beam.read.CSVSource
 //import eventstream.beam.source.CSVReadParameters
 //import eventstream.beam.source.CSVSource
 //import eventstream.beam.transformations.csv.*

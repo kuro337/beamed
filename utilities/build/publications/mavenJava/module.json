@@ -39,10 +39,10 @@
           "name": "utilities-1.0.0.jar",
           "url": "utilities-1.0.0.jar",
           "size": 9623,
-          "sha512": "a3e6cf9b3b6ef9a1e71cf9504ed8f554704cd847bda3bf5fa40e77a716ad0dabf6f47dfd1f0e2333bc970eaf131928d266408332fff5d2ecfb5f0b8fa502109c",
-          "sha256": "e0f1e82faf1540a68f517db7be6770375a55569dbe1bbecebadf20aafaeb244b",
-          "sha1": "57b3ed5c4be62b2d479355ec1a40776e44ebcfe6",
-          "md5": "fbd21fbaa59c87fbe980d483f29cb419"
+          "sha512": "a8eb666da2815617046b3bcd0d92db8fed0f23f5f082cd699a6b264646c5218197bfadab2007240e3de84618b2f310df5c2c1e81811387e46b99a5deed109bfe",
+          "sha256": "18ae03887cc08ae26d0c407166bf89dc09198dd7a554afb4c6994c6a02d35d42",
+          "sha1": "bc3e2dabf29f82fdde131d1213f931741394b40a",
+          "md5": "9a627d0b3c8dc4afa296da2ad12f68cb"
         }
       ]
     },
@@ -94,10 +94,10 @@
           "name": "utilities-1.0.0.jar",
           "url": "utilities-1.0.0.jar",
           "size": 9623,
-          "sha512": "a3e6cf9b3b6ef9a1e71cf9504ed8f554704cd847bda3bf5fa40e77a716ad0dabf6f47dfd1f0e2333bc970eaf131928d266408332fff5d2ecfb5f0b8fa502109c",
-          "sha256": "e0f1e82faf1540a68f517db7be6770375a55569dbe1bbecebadf20aafaeb244b",
-          "sha1": "57b3ed5c4be62b2d479355ec1a40776e44ebcfe6",
-          "md5": "fbd21fbaa59c87fbe980d483f29cb419"
+          "sha512": "a8eb666da2815617046b3bcd0d92db8fed0f23f5f082cd699a6b264646c5218197bfadab2007240e3de84618b2f310df5c2c1e81811387e46b99a5deed109bfe",
+          "sha256": "18ae03887cc08ae26d0c407166bf89dc09198dd7a554afb4c6994c6a02d35d42",
+          "sha1": "bc3e2dabf29f82fdde131d1213f931741394b40a",
+          "md5": "9a627d0b3c8dc4afa296da2ad12f68cb"
         }
       ]
     },
@@ -114,10 +114,10 @@
           "name": "utilities-1.0.0-javadoc.jar",
           "url": "utilities-1.0.0-javadoc.jar",
           "size": 261,
-          "sha512": "71aeed5948369cbcd4e3a80bf72e8d9be61ad36f384a702b84bc9fc59123a4dc4ab1b0ec5faa07e6c7485298aa86b56086c7720a6f0faf0528a153120bd3f8f7",
-          "sha256": "3a8d7cfdcfb91cf07bc669b98c376f4496e4f129a3f4e8c84c2571de0d1e16a4",
-          "sha1": "4643ad8601d0e161a68d931f776841a7cda66034",
-          "md5": "ebab980162fb93a6edf4e6d77334b4dc"
+          "sha512": "9f16a96f495d36ab0f41b09ce0d397d2125ccd88bad4da84524bd02bad436e44cb0107b34b9d409412538fb4cc192385d91ccd255df815b27558ccc1f50b2d84",
+          "sha256": "143bbf2434c9d7b01e3a50527734397c5a6cee0cbb9072bbce5d15838639e39e",
+          "sha1": "5fc96355dac6a0e96d919d3b9977e90936566cc8",
+          "md5": "94045165911ac1f380678326ca479be4"
         }
       ]
     },
@@ -134,10 +134,10 @@
           "name": "utilities-1.0.0-sources.jar",
           "url": "utilities-1.0.0-sources.jar",
           "size": 2419,
-          "sha512": "e8befd3b09a1432d0fff388fd2830970499b8064ca5e630d9157fd082552a0bfe86f77c131090bda571a3a3bd1cb1855950d63de256efe036661acba3464cf53",
-          "sha256": "779d66de471ea96eaa542be5abae38be0f0fffa98243ac12df3136f225554478",
-          "sha1": "2d8cd461f670c3408076b350d29901dbed37afb0",
-          "md5": "99183e9ad9830cd9a35145d0b806b99a"
+          "sha512": "7faabffef24ac9b8a6cdfb26088673cfa30f06c1972c98799b68dd1f9e417f502a3ec8590c899e87164119b23f0b0b2b75ee8ba03bc6a8d3f498bc5327e20840",
+          "sha256": "38dab60351302072f581f5e59482fb32ba7a790402e9ad226e5ea3aa0d49ee7f",
+          "sha1": "43e928cb635f7a3b6a8c178fd4229ebff0e98f17",
+          "md5": "fce7b1140e0238263a4544571e28a7a8"
         }
       ]
     }

@@ -5,6 +5,27 @@ import org.apache.beam.sdk.options.Description
 import org.apache.beam.sdk.options.PipelineOptions
 import org.apache.beam.sdk.options.PipelineOptionsFactory
 
+/**
+ * Interface defining the configuration options for Kafka in Apache Beam pipelines.
+ *
+ * This interface provides methods to set and get configurations related to Kafka,
+ * such as bootstrap servers, SASL JAAS config, security protocol, and SASL mechanism.
+ * The `@Description` annotation provides a description for each method, making it
+ * more understandable and accessible for users.
+ *
+ * When `PipelineOptionsFactory` is used with this interface, it dynamically generates
+ * an implementation at runtime. This implementation parses provided command-line arguments
+ * (or programmatically passed arguments) and maps them to the appropriate methods defined
+ * in this interface.
+ *
+ * Example usage in a Beam pipeline:
+ * ```
+ * val kafkaOptions = createKafkaPipelineOptions(args)
+ * val pipeline = Pipeline.create(kafkaOptions)
+ * ```
+ *
+ * @sample eventstream.kafka.client.KafkaController.readMessages
+ */
 interface KafkaPipelineOptions : PipelineOptions {
 
     @Description("Kafka bootstrap servers")
@@ -23,16 +44,8 @@ interface KafkaPipelineOptions : PipelineOptions {
     fun getSaslMechanism(): String
     fun setSaslMechanism(value: String)
 
-
 }
 
-/*
-
-val kafkaOptions = createKafkaPipelineOptions(args, groupId = "my-consumer-group")
-
-val pipeline = Pipeline.create(kafkaOptions)
-
-*/
 
 /**
  * Creates KafkaPipelineOptions using provided command-line arguments.
@@ -48,11 +61,11 @@ val pipeline = Pipeline.create(kafkaOptions)
  * @param args Command-line arguments passed to the application.
  * @return Configured KafkaPipelineOptions.
  */
-fun createKafkaPipelineOptions(args: Array<String>): KafkaPipelineOptions {
+fun createKafkaPipelineOptions(args: Array<String> = arrayOf()): KafkaPipelineOptions {
 
     val password: String = System.getenv("KAFKA_PASSWORD") ?: ""
 
-    logger.info { "Passowrd is $password " }
+    logger.info { "Password is $password " }
 
 
     return PipelineOptionsFactory.fromArgs(*args)
@@ -78,11 +91,9 @@ fun createKafkaPipelineOptions(args: Array<String>): KafkaPipelineOptions {
 
 /*
 
-object KafkaKubeOptions {
-    private val password: String = System.getenv("KAFKA_PASSWORD") ?: ""
-    val saslJaasConfig: String =
-        "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"user1\" password=\"$password\";"
-    const val securityProtocol: String = "SASL_PLAINTEXT"
-    const val saslMechanism: String = "SCRAM-SHA-256"
-}
- */
+val kafkaOptions = createKafkaPipelineOptions(args, groupId = "my-consumer-group")
+
+val pipeline = Pipeline.create(kafkaOptions)
+
+
+*/

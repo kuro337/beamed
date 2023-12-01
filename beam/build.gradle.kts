@@ -1,5 +1,7 @@
 /*
 ./gradlew :beam:run
+
+./gradlew clean :beam:build
 */
 
 plugins {
@@ -50,12 +52,12 @@ tasks.shadowJar {
     transform(com.github.jengelman.gradle.plugins.shadow.transformers.ServiceFileTransformer::class.java)
     isZip64 = true
 
-    archiveBaseName.set("KafkaApp")
+    archiveBaseName.set("OptionsApp")
     archiveClassifier.set("pipeline")
 
 
     manifest {
-        attributes["Main-Class"] = "eventstream.beam.KafkaAppKt"
+        attributes["Main-Class"] = "eventstream.beam.OptionsAppKt"
     }
 }
 
@@ -65,7 +67,7 @@ java {
 }
 
 application {
-    mainClass.set("eventstream.beam.KafkaAppKt")
+    mainClass.set("eventstream.beam.OptionsAppKt")
 }
 
 publishing {

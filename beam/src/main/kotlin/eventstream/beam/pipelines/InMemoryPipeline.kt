@@ -22,7 +22,15 @@ import eventstream.beam.write.WriteParquetCollection
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.apache.avro.generic.GenericRecord
 import org.apache.beam.sdk.Pipeline
+import org.apache.beam.sdk.options.PipelineOptions
 import org.apache.beam.sdk.values.PCollection
+
+
+// Creating Beam Pipeline
+fun createBeamPipeline(args: Array<String>, options: PipelineOptions): Pipeline {
+    val pipeline = Pipeline.create(options)
+    return pipeline
+}
 
 
 class InMemoryPipelineOptions(

@@ -87,7 +87,8 @@ fun createFlinkPipeline(
     flinkMasterURL: String? = System.getenv("FLINK_MASTER_URL"), // "flink-cluster-session-rest:8081",
     awsAccessKey: String? = System.getenv("AWS_ACCESS_KEY_ID"),
     awsSecretKey: String? = System.getenv("AWS_SECRET_ACCESS_KEY"),
-    awsRegion: String? = System.getenv("AWS_REGION")
+    awsRegion: String? = System.getenv("AWS_REGION"),
+    //optionsList: List<PipelineOptions>
 ): Pipeline {
 
     BeamLogger.logger.info { "Using URL $flinkMasterURL" }
@@ -95,6 +96,7 @@ fun createFlinkPipeline(
     // Create FlinkPipelineOptions with job name and Flink master URL
     val options = createFlinkPipelineOptions(flinkMasterURL!!, jobName)
 
+    //optionsList.forEach { options.setAll }
     // Attach AWS credentials if provided
     if (!awsAccessKey.isNullOrBlank() && !awsSecretKey.isNullOrBlank()) {
         attachAWSCredsToFlinkPipelineOptions(options, awsAccessKey, awsSecretKey, awsRegion)
